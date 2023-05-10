@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -99,6 +100,12 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
+                      <Link
+                        href={`/medicament/${row.getValue("id")}`}
+                        key={cell.id}
+                      >
+                        APARECA POR FAVOR
+                      </Link>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
