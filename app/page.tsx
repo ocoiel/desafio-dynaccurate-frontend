@@ -7,6 +7,7 @@ import { z } from "zod"
 
 import { medSchema } from "@/types/medicament-schema"
 import { siteConfig } from "@/config/site"
+import { RequestAPI, fetcher } from "@/lib/fetcher"
 import { buttonVariants } from "@/components/ui/button"
 import { columns } from "@/components/table/columns"
 import { DataTable } from "@/components/table/data-table"
@@ -17,16 +18,10 @@ export const metadata: Metadata = {
   description: "A task and issue tracker build using Tanstack Table.",
 }
 
-async function getMedicaments() {
-  const data = await fetch("http://127.0.0.1:3333/med")
-
-  const medicaments = (await data.json()) as z.infer<typeof medSchema>[]
-
-  return z.array(medSchema).parse(medicaments)
-}
-
 export default async function IndexPage() {
-  const medicaments = await getMedicaments()
+  const { items: medicaments } = await fetcher<RequestAPI>(
+    "http://127.0.0.1:3333/med"
+  )
 
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">

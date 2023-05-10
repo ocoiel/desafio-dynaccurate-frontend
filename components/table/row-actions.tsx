@@ -74,7 +74,7 @@ export function DataTableRowActions<TData>({
             Labels
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className="p-0">
-            <DropdownMenuRadioGroup value={med.label}>
+            <DropdownMenuRadioGroup value={med.label!}>
               {labels.map((label) => (
                 <DropdownMenuRadioItem key={label.value} value={label.value}>
                   {label.label}

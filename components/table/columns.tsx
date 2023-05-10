@@ -2,14 +2,14 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 
-import { Task } from "@/types/medicament-schema"
+import { Medicaments } from "@/types/medicament-schema"
 import { Checkbox } from "@/components/ui/checkbox"
 
 import { DataTableColumnHeader } from "./colmun-header"
 import { labels, priorities, statuses } from "./data"
 import { DataTableRowActions } from "./row-actions"
 
-export const columns: ColumnDef<Task>[] = [
+export const columns: ColumnDef<Medicaments>[] = [
   {
     id: "select",
     header: ({ table }) => (

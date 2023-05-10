@@ -2,14 +2,14 @@ import { z } from "zod"
 
 export const medSchema = z.object({
   id: z.string(),
-  title: z.string(),
-  status: z.string(),
-  label: z.string(),
-  priority: z.string(),
-  description: z.string().nullish(),
-  expirationDate: z.string(),
+  name: z.string(),
   price: z.number(),
-  imageUrl: z.string().nullish(),
+  expiration_date: z.string(),
+  status: z.string().nullish(),
+  image_url: z.string().nullish(),
+  label: z.string().nullish(),
+  priority: z.string().nullish(),
+  description: z.string().nullish(),
 })
 
-export type Task = z.infer<typeof medSchema>
+export type Medicaments = z.infer<typeof medSchema>
