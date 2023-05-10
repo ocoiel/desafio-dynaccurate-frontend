@@ -17,11 +17,10 @@ export const metadata: Metadata = {
   description: "A task and issue tracker build using Tanstack Table.",
 }
 
-// Simulate a database read for tasks.
 async function getMedicaments() {
-  const data = await fetch("http://localhost:3333/med")
+  const data = await fetch("http://127.0.0.1:3333/med")
 
-  const medicaments = await data.json()
+  const medicaments = (await data.json()) as z.infer<typeof medSchema>[]
 
   return z.array(medSchema).parse(medicaments)
 }
