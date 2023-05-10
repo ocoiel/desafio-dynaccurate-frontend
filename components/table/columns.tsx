@@ -6,7 +6,7 @@ import { Task } from "@/types/medicament-schema"
 import { Checkbox } from "@/components/ui/checkbox"
 
 import { labels, priorities, statuses } from "../data/data"
-import { DataTableColumnHeader } from "./data-table-column-header"
+import { DataTableColumnHeader } from "./colmun-header"
 import { DataTableRowActions } from "./data-table-row-actions"
 
 export const columns: ColumnDef<Task>[] = [
