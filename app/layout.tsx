@@ -27,10 +27,9 @@ export const metadata: Metadata = {
 
 interface RootLayoutProps {
   children: React.ReactNode
-  modal: React.ReactNode
 }
 
-export default function RootLayout({ children, modal }: RootLayoutProps) {
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
@@ -44,10 +43,7 @@ export default function RootLayout({ children, modal }: RootLayoutProps) {
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <div className="relative flex min-h-screen flex-col">
               <SiteHeader />
-              <div className="flex-1">
-                {children}
-                {modal}
-              </div>
+              <div className="flex-1">{children}</div>
             </div>
             <TailwindIndicator />
           </ThemeProvider>

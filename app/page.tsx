@@ -33,7 +33,7 @@ export default async function IndexPage() {
       </div>
       <div className="flex gap-4">
         <Link
-          href={"/"}
+          href={"/new"}
           rel="noreferrer"
           className={buttonVariants({ size: "lg" })}
         >
