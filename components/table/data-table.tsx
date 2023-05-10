@@ -100,12 +100,6 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      <Link
-                        href={`/medicament/${row.getValue("id")}`}
-                        key={cell.id}
-                      >
-                        APARECA POR FAVOR
-                      </Link>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

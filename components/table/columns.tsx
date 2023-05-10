@@ -45,6 +45,7 @@ export const columns: ColumnDef<Medicaments>[] = [
   },
   {
     accessorKey: "image",
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader
         className="items-center justify-center"
