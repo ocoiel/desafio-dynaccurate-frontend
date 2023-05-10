@@ -1,7 +1,11 @@
 import { Medicaments } from "@/types/medicament-schema"
 
-export async function fetcher<T>(url: string): Promise<T> {
-  const res = await fetch(url)
+export async function fetcher<T>(url: string, tags?: string[]): Promise<T> {
+  const res = await fetch(url, {
+    next: {
+      tags,
+    },
+  })
   const data = (await res.json()) as T
 
   return data

@@ -34,7 +34,7 @@ export const columns: ColumnDef<Medicaments>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Task" />
+      <DataTableColumnHeader column={column} title="Identificação" />
     ),
     cell: ({ row }) => (
       <div className="w-[80px] truncate">{row.getValue("id")}</div>
@@ -58,6 +58,32 @@ export const columns: ColumnDef<Medicaments>[] = [
         </div>
       )
     },
+  },
+  {
+    accessorKey: "price",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Preço" />
+    ),
+    cell: ({ row }) => (
+      <div className="flex w-[100px] items-center">
+        <span>R$ {row.getValue("price")}</span>
+      </div>
+    ),
+  },
+  {
+    accessorKey: "expiration_date",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Data de validade" />
+    ),
+    cell: ({ row }) => (
+      <div className="flex w-[100px] items-center justify-center">
+        <span>
+          {new Date(row.getValue("expiration_date")).toLocaleDateString(
+            "pt-BR"
+          )}
+        </span>
+      </div>
+    ),
   },
   {
     accessorKey: "status",

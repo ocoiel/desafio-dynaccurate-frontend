@@ -15,7 +15,8 @@ export const metadata: Metadata = {
 
 export default async function IndexPage() {
   const { items: medicaments } = await fetcher<RequestAPI>(
-    "http://127.0.0.1:3333/med"
+    "http://127.0.0.1:3333/med",
+    ["medicament"]
   )
 
   return (
