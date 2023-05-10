@@ -1,5 +1,6 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
+import NextTopLoader from "nextjs-toploader"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
@@ -42,6 +43,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <div className="relative flex min-h-screen flex-col">
+              <NextTopLoader
+                showSpinner={false}
+                color="#fff"
+                shadow="0 0 10px #fff, 0 0 12px #fff"
+              />
               <SiteHeader />
               <div className="flex-1">{children}</div>
             </div>
