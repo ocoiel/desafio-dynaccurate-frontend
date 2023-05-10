@@ -3,7 +3,7 @@
 import { Row } from "@tanstack/react-table"
 import { Copy, MoreHorizontal, Pen, Star, Tags, Trash } from "lucide-react"
 
-import { taskSchema } from "@/types/medicament-schema"
+import { medSchema } from "@/types/medicament-schema"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -41,7 +41,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  const task = taskSchema.parse(row.original)
+  const med = medSchema.parse(row.original)
 
   return (
     <DropdownMenu>
@@ -74,7 +74,7 @@ export function DataTableRowActions<TData>({
             Labels
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className="p-0">
-            <DropdownMenuRadioGroup value={task.label}>
+            <DropdownMenuRadioGroup value={med.label}>
               {labels.map((label) => (
                 <DropdownMenuRadioItem key={label.value} value={label.value}>
                   {label.label}

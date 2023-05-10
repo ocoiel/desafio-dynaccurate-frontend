@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { z } from "zod"
 
-import { taskSchema } from "@/types/medicament-schema"
+import { medSchema } from "@/types/medicament-schema"
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
 import { columns } from "@/components/table/columns"
@@ -18,16 +18,16 @@ export const metadata: Metadata = {
 }
 
 // Simulate a database read for tasks.
-async function getTasks() {
-  const data = await fs.readFile(path.join(process.cwd(), "public/tasks.json"))
+async function getMedicaments() {
+  const data = await fetch("http://localhost:3333/med")
 
-  const tasks = JSON.parse(data.toString())
+  const medicaments = await data.json()
 
-  return z.array(taskSchema).parse(tasks)
+  return z.array(medSchema).parse(medicaments)
 }
 
 export default async function IndexPage() {
-  const tasks = await getTasks()
+  const medicaments = await getMedicaments()
 
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
@@ -62,7 +62,7 @@ export default async function IndexPage() {
       <div className="flex items-center space-x-2">
         <UserNav />
       </div>
-      <DataTable data={tasks} columns={columns} />
+      <DataTable data={medicaments} columns={columns} />
     </section>
   )
 }
