@@ -5,10 +5,10 @@ import { X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { DataTableViewOptions } from "@/app/examples/tasks/components/data-table-view-options"
 
 import { priorities, statuses } from "./data"
 import { DataTableFacetedFilter } from "./filter"
+import { DataTableViewOptions } from "./view-options"
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
