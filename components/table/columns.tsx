@@ -5,9 +5,9 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Task } from "@/types/medicament-schema"
 import { Checkbox } from "@/components/ui/checkbox"
 
-import { labels, priorities, statuses } from "../data/data"
 import { DataTableColumnHeader } from "./colmun-header"
-import { DataTableRowActions } from "./data-table-row-actions"
+import { labels, priorities, statuses } from "./data"
+import { DataTableRowActions } from "./row-actions"
 
 export const columns: ColumnDef<Task>[] = [
   {
