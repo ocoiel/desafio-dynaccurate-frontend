@@ -71,7 +71,7 @@ dependencies:
     specifier: ^1.0.5
     version: 1.0.5(tailwindcss@3.3.1)
   zod:
-    specifier: link:@hookform/resolvers/zod
+    specifier: ^3.21.4
     version: 3.21.4
 
 devDependencies:
