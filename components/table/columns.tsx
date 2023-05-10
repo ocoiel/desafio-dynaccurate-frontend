@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Medicaments } from "@/types/medicament-schema"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Checkbox } from "@/components/ui/checkbox"
 
 import { DataTableColumnHeader } from "./colmun-header"
@@ -41,6 +42,38 @@ export const columns: ColumnDef<Medicaments>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: "image",
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className="items-center justify-center"
+        column={column}
+        title="Imagem"
+      />
+    ),
+    cell: ({ row }) => {
+      const image = row.original.image_url
+
+      if (!image) return null
+
+      let fallback = row.getValue("name") as string
+      if (fallback.split(" ").length > 1) {
+        fallback =
+          fallback.split(" ")[0].charAt(0) + fallback.split(" ")[1].charAt(0)
+      } else {
+        fallback = fallback.split(" ")[0].charAt(0)
+      }
+
+      return (
+        <div className="flex w-[80px] items-center justify-center space-x-2">
+          <Avatar className="h-10 w-10 object-contain">
+            <AvatarImage src={image} alt={"Deus é bom"} />
+            <AvatarFallback>{fallback.toLocaleUpperCase()}</AvatarFallback>
+          </Avatar>
+        </div>
+      )
+    },
   },
   {
     accessorKey: "name",
