@@ -1,9 +1,36 @@
+import { promises as fs } from "fs"
+import path from "path"
+import { Metadata } from "next"
+import Image from "next/image"
 import Link from "next/link"
+import { z } from "zod"
 
+import { taskSchema } from "@/types/medicament-schema"
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
+import { columns } from "@/components/table/columns"
+import { DataTable } from "@/components/table/data-table"
+import { UserNav } from "@/components/user-nav"
 
-export default function IndexPage() {
+export const metadata: Metadata = {
+  title: "Tasks",
+  description: "A task and issue tracker build using Tanstack Table.",
+}
+
+// Simulate a database read for tasks.
+async function getTasks() {
+  const data = await fs.readFile(
+    path.join(process.cwd(), "app/examples/tasks/data/tasks.json")
+  )
+
+  const tasks = JSON.parse(data.toString())
+
+  return z.array(taskSchema).parse(tasks)
+}
+
+export default async function IndexPage() {
+  const tasks = await getTasks()
+
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
       <div className="flex max-w-[980px] flex-col items-start gap-2">
@@ -34,6 +61,10 @@ export default function IndexPage() {
           GitHub
         </Link>
       </div>
+      <div className="flex items-center space-x-2">
+        <UserNav />
+      </div>
+      <DataTable data={tasks} columns={columns} />
     </section>
   )
 }
