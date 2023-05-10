@@ -1,11 +1,6 @@
-import { promises as fs } from "fs"
-import path from "path"
 import { Metadata } from "next"
-import Image from "next/image"
 import Link from "next/link"
-import { z } from "zod"
 
-import { medSchema } from "@/types/medicament-schema"
 import { siteConfig } from "@/config/site"
 import { RequestAPI, fetcher } from "@/lib/fetcher"
 import { buttonVariants } from "@/components/ui/button"
