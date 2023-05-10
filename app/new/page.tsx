@@ -1,3 +1,3 @@
-export default function CreateMedicament() {
+export default async function CreateMedicament() {
   return <div>Create Medicament</div>
 }
