@@ -8,6 +8,8 @@ import { columns } from "@/components/table/columns"
 import { DataTable } from "@/components/table/data-table"
 import { UserNav } from "@/components/user-nav"
 
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Tasks",
   description: "A task and issue tracker build using Tanstack Table.",

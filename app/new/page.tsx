@@ -1,7 +1,7 @@
 "use client"
 
-import { randomUUID } from "crypto"
 import { useState } from "react"
+import { revalidatePath } from "next/cache"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, type FieldError } from "react-hook-form"
 
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Icons } from "@/components/icons"
+import { Uploader } from "@/components/uploader"
 
 // JSON.stringify(error) will not work, because of circulare structure. So we need this helper.
 const formatErrors = (errors: Record<string, FieldError>) =>
@@ -53,7 +54,21 @@ export default function CreateMedicament() {
 
   // The onSubmit function is invoked by RHF only if the validation is OK.
   function onSubmit(medicament: Omit<Medicaments, "id">) {
-    console.log("dans onSubmit", medicament)
+    fetch("http://127.0.0.1:3333/med/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: medicament.name,
+        price: medicament.price,
+        expiration_date: new Date(medicament.expiration_date),
+        image_url: "https://picsum.photos/200",
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.error(err))
+
+    revalidatePath("/")
   }
 
   return (
@@ -149,6 +164,7 @@ export default function CreateMedicament() {
             2
           )}
         </pre>
+        {/* <Uploader medicament_id="" /> */}
       </form>
     </div>
   )

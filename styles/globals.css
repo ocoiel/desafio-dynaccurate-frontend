@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+.filepond--panel-root {
+  background-color: red;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -67,6 +70,12 @@
     --ring: 216 34% 17%;
 
     --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  .filepond--panel-root {
+    background-color: #eee;
   }
 }
 
