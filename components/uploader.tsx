@@ -32,6 +32,7 @@ export function Uploader({ medicament_id }: { medicament_id: string }) {
         instantUpload={false}
         allowImagePreview
         allowProcess
+        acceptedFileTypes={["image/*"]}
         oninit={() => console.log("FilePond initialized")}
         onaddfile={() => console.log("File added")}
         allowFileSizeValidation

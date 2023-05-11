@@ -7,6 +7,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Checkbox } from "@/components/ui/checkbox"
 
 import { Icons } from "../icons"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog"
 import { DataTableColumnHeader } from "./colmun-header"
 import { labels, priorities, statuses } from "./data"
 import { DataTableRowActions } from "./row-actions"
@@ -191,3 +199,19 @@ export const columns: ColumnDef<Medicaments>[] = [
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ]
+
+function EditDialog() {
+  return (
+    <Dialog>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Are you sure absolutely sure?</DialogTitle>
+          <DialogDescription>
+            This action cannot be undone. This will permanently delete your
+            {/* account and remove your data from our servers. {medicament_id} */}
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
+  )
+}
