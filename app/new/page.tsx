@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, type FieldError } from "react-hook-form"
 
@@ -66,9 +66,9 @@ export default function CreateMedicament() {
     })
       .then((res) => res.json())
       .then((data) => console.log(data))
+      .then(() => revalidatePath("/"))
+      .then(() => revalidateTag("medicament"))
       .catch((err) => console.error(err))
-
-    revalidatePath("/")
   }
 
   return (
