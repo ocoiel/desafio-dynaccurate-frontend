@@ -1,10 +1,15 @@
 "use client"
 
+import { randomUUID } from "crypto"
+import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, type FieldError } from "react-hook-form"
-import { z } from "zod"
 
+import { Medicaments, medSchema } from "@/types/medicament-schema"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Icons } from "@/components/icons"
 
 // JSON.stringify(error) will not work, because of circulare structure. So we need this helper.
 const formatErrors = (errors: Record<string, FieldError>) =>
@@ -33,67 +38,22 @@ const AlertInput = ({ children }: { children: React.ReactNode }) =>
     </span>
   ) : null
 
-/* ---------- Zod schema et TS type ----------*/
-
-const titles = ["Mr", "Mrs", "Miss", "Dr"] as const // as const is mandatory to get litteral types in UserType.
-
-// Describe the correctness of data's form.
-const userSchema = z
-  .object({
-    firstName: z.string().max(36),
-    lastName: z
-      .string()
-      .min(1, { message: "The lastName is required." })
-      .max(36),
-    mobileNumber: z.string().min(10).max(13).optional(),
-    email: z
-      .string()
-      .min(1, "The email is required.")
-      .email({ message: "The email is invalid." }),
-    confirmEmail: z.string().min(1, "The email is required."),
-    // At first, no option radio are checked so this is null. So the error is "Expected string, received null".
-    // So we need to accept first string or null, in order to apply refine to set a custom message.
-    isDeveloper: z.union([z.string(), z.null()]).refine((val) => val !== null, {
-      message: "Please, make a choice!",
-    }),
-    title: z.enum(titles),
-    age: z
-      .number({ invalid_type_error: "Un nombre est attendu" })
-      .int()
-      .refine((val) => val >= 18, { message: "Vous devez être majeur" }),
-  })
-  // The refine method is used to add custom rules or rules over multiple fields.
-  .refine((data) => data.email === data.confirmEmail, {
-    message: "Emails don't match.",
-    path: ["confirmEmail"], // Set the path of this error on the confirmEmail field.
-  })
-
-// Infer the TS type according to the zod schema.
-type UserType = z.infer<typeof userSchema>
-
 export default function CreateMedicament() {
+  const [hasDescription, setHasDescription] = useState(false)
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, isSubmitting, isSubmitted, isDirty, isValid },
-  } = useForm<UserType>({
+  } = useForm<Omit<Medicaments, "id">>({
     mode: "onChange",
-    resolver: zodResolver(userSchema), // Configuration the validation with the zod schema.
-    defaultValues: {
-      isDeveloper: undefined,
-      mobileNumber: "666-666666",
-      firstName: "toto",
-      lastName: "titi",
-      email: "",
-      confirmEmail: "",
-      title: "Miss",
-    },
+    resolver: zodResolver(medSchema.omit({ id: true })),
   })
 
   // The onSubmit function is invoked by RHF only if the validation is OK.
-  const onSubmit = (user: UserType) => {
-    console.log("dans onSubmit", user)
+  function onSubmit(medicament: Omit<Medicaments, "id">) {
+    console.log("dans onSubmit", medicament)
   }
 
   return (
@@ -111,86 +71,69 @@ export default function CreateMedicament() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="m-6 flex max-w-3xl flex-col rounded-lg border-t-4 border-black bg-white p-6 dark:border-white dark:bg-neutral-900 md:mx-auto"
+        className="m-6 flex max-w-3xl flex-col rounded-lg border border-t-4 border-border bg-background p-6 md:mx-auto"
         noValidate
       >
         {/* use aria-invalid to indicate field contain error for accessiblity reasons. */}
         <div className="flex w-full flex-col space-y-4">
+          <Label htmlFor="name">Nome</Label>
           <Input
             type="text"
-            placeholder="First name is not mandatory"
-            {...register("firstName")}
-            aria-invalid={Boolean(errors.firstName)}
+            placeholder="Nome do medicamento"
+            id="name"
+            aria-invalid={Boolean(errors.name)}
+            autoFocus
+            required
+            {...register("name")}
           />
-          <AlertInput>{errors?.firstName?.message}</AlertInput>
+          {/* <AlertInput>{errors?.firstName?.message}</AlertInput> */}
 
-          <Input
-            type="text"
-            placeholder="Last name (mandatory)"
-            {...register("lastName")}
-            aria-invalid={Boolean(errors.lastName)}
-          />
-          <AlertInput>{errors?.lastName?.message}</AlertInput>
+          <span
+            onClick={() => setHasDescription(!hasDescription)}
+            className="flex w-52 cursor-pointer items-center text-sm text-neutral-500 transition-colors duration-100 hover:text-neutral-400"
+          >
+            <Icons.add className="mr-1 h-4 w-4" />
+            {hasDescription ? "Remover descrição" : "Adicionar descrição"}
+          </span>
+          {hasDescription && (
+            <div className="flex flex-col space-y-2">
+              <Label htmlFor="description">
+                Descrição <span className="text-neutral-500">(opcional)</span>
+              </Label>{" "}
+              <Textarea
+                placeholder="Fale mais, fale mais 👀"
+                {...register("description")}
+              />
+            </div>
+          )}
 
-          <Input
-            type="text"
-            placeholder="Email (mandatory)"
-            {...register("email")}
-            aria-invalid={Boolean(errors.email)}
-          />
-          <AlertInput>{errors?.email?.message}</AlertInput>
+          <div className="flex w-full flex-row justify-around gap-x-4">
+            <div className="w-full">
+              <Label>Preço</Label>
+              <Input
+                type="number"
+                placeholder="Preço"
+                aria-invalid={Boolean(errors.price)}
+                {...register("price", {
+                  valueAsNumber: true,
+                  min: 0,
+                })}
+              />
+              <AlertInput>{errors?.price?.message}</AlertInput>
+            </div>
 
-          <Input
-            type="text"
-            placeholder="The same email as above"
-            {...register("confirmEmail")}
-            aria-invalid={Boolean(errors.confirmEmail)}
-          />
-          <AlertInput>{errors?.confirmEmail?.message}</AlertInput>
-
-          <input
-            type="tel"
-            placeholder="Mobile number (mandatory)"
-            {...register("mobileNumber")}
-            aria-invalid={Boolean(errors.mobileNumber)}
-          />
-          <AlertInput>{errors?.mobileNumber?.message}</AlertInput>
-
-          <select {...register("title")} aria-invalid={Boolean(errors.title)}>
-            {titles.map((elt) => (
-              <option key={elt} value={elt}>
-                {elt}
-              </option>
-            ))}
-          </select>
-
-          <label>
-            Âge
-            <input
-              type="number"
-              placeholder="Age"
-              {...register("age", { valueAsNumber: true })}
-              aria-invalid={Boolean(errors.age)}
-            />
-          </label>
-          <AlertInput>{errors?.age?.message}</AlertInput>
-
-          <div>
-            <p>Are you a developer? (mandatory)</p>
-            <label>
-              Yes
-              <input {...register("isDeveloper")} type="radio" value="Yes" />
-            </label>
+            <div className="w-full">
+              <Label>Data de validade</Label>
+              <Input
+                type="date"
+                placeholder="Data de validade"
+                {...register("expiration_date")}
+                aria-invalid={Boolean(errors.expiration_date)}
+              />
+              <AlertInput>{errors?.expiration_date?.message}</AlertInput>
+            </div>
           </div>
-          <div>
-            <label>
-              No
-              <input {...register("isDeveloper")} type="radio" value="No" />
-            </label>
-          </div>
-          <AlertInput>{errors?.isDeveloper?.message}</AlertInput>
         </div>
-
         <input
           type="submit"
           title="koeeee"

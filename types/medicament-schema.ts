@@ -3,7 +3,10 @@ import { z } from "zod"
 export const medSchema = z.object({
   id: z.string(),
   name: z.string(),
-  price: z.number(),
+  price: z
+    .number({ invalid_type_error: "Deve ser passado um numero" })
+    .int()
+    .refine((val) => val >= 0, { message: "O preço deve ser positivo" }),
   expiration_date: z.string(),
   status: z.string().nullish(),
   image_url: z.string().nullish(),
