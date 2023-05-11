@@ -6,6 +6,7 @@ import { Medicaments } from "@/types/medicament-schema"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Checkbox } from "@/components/ui/checkbox"
 
+import { Icons } from "../icons"
 import { DataTableColumnHeader } from "./colmun-header"
 import { labels, priorities, statuses } from "./data"
 import { DataTableRowActions } from "./row-actions"
@@ -68,10 +69,22 @@ export const columns: ColumnDef<Medicaments>[] = [
 
       return (
         <div className="flex w-[80px] items-center justify-center space-x-2">
-          <Avatar className="h-10 w-10 object-contain">
-            <AvatarImage src={image} alt={"Deus é bom"} />
-            <AvatarFallback>{fallback.toLocaleUpperCase()}</AvatarFallback>
-          </Avatar>
+          <div className="group relative cursor-pointer">
+            <Avatar className="h-10 w-10">
+              <AvatarImage
+                className="group-hover:brightness-50"
+                loading="lazy"
+                src={image}
+                alt="Image"
+              />
+              <AvatarFallback>
+                <span>{fallback}</span>
+              </AvatarFallback>
+            </Avatar>
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100">
+              <Icons.edit className="text-white" />
+            </div>
+          </div>
         </div>
       )
     },
