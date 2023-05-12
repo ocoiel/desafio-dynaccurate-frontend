@@ -1,6 +1,8 @@
 "use client"
 
-// study to discover why this not can be a server component with React Query
+// Study to discover why this not can be a server component with React Query
+// Give a try to newest way to handle this stuff with `sever actions` from 13.4
+// Like revalidadeTag, experimental_form and etc...
 import Link from "next/link"
 
 import { siteConfig } from "@/config/site"

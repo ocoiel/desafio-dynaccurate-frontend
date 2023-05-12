@@ -3,6 +3,7 @@
 import { getMedicaments } from "@/service/api"
 import { useQuery } from "@tanstack/react-query"
 
+import { SkeletonTable } from "./skeleton-table"
 import { columns } from "./table/columns"
 import { DataTable } from "./table/data-table"
 
@@ -22,8 +23,10 @@ export function ListMedicaments() {
   return (
     <>
       {isLoading && <>Carregando...</>}
-      {isFetching && <>Colocar um skelecton bonitinho aqui...</>}
-      {isSuccess && <DataTable data={medicaments} columns={columns} />}
+      {isFetching && <SkeletonTable />}
+      {isSuccess && !isFetching && (
+        <DataTable data={medicaments} columns={columns} />
+      )}
     </>
   )
 }
