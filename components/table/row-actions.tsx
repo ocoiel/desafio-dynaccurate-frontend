@@ -6,6 +6,7 @@ import { Row } from "@tanstack/react-table"
 import { Copy, MoreHorizontal, Pencil, Star, Tags, Trash } from "lucide-react"
 
 import { Medicaments, medSchema } from "@/types/medicament-schema"
+import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -51,49 +52,53 @@ interface DataTableRowActionsProps<TData> {
   row: Row<TData>
 }
 
-function updateMedicament(
-  e: React.FormEvent<HTMLFormElement>,
-  medicament_id: string
-) {
-  e.preventDefault()
-  const formData = new FormData(e.currentTarget)
-  const name = formData.get("name") as string
-  const price = formData.get("price") as string
-  const expiration_date_string = formData.get("expiration_date") as string
-  const expiration_date = new Date(expiration_date_string)
-  const image_url = formData.get("image_url") as string
-
-  const med = {
-    medicament_id,
-    name,
-    price,
-    expiration_date,
-    image_url,
-  }
-
-  // fetch(`http://127.0.0.1:3333/med/${med.id}/update`, {
-  //   method: "PUT",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify({
-  //     id: formData.get("name"),
-  //     name: med.name,
-  //     price: med.price,
-  //     expiration_date: new Date(med.expiration_date),
-  //     image_url: "https://picsum.photos/200",
-  //   }),
-  // })
-  //   .then((res) => res.json())
-  //   .then((data) => console.log(data))
-  //   .catch((err) => console.error(err))
-
-  console.log(med)
-}
-
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const [showModal, setShowModal] = useState(false)
   const med = medSchema.parse(row.original)
+
+  function updateMedicament(
+    e: React.FormEvent<HTMLFormElement>,
+    medicament_id: string
+  ) {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const name = formData.get("name") as string
+    const price = formData.get("price") as string
+    const expiration_date_string = formData.get("expiration_date") as string
+    const expiration_date = new Date(expiration_date_string)
+    const image_url = formData.get("image_url") as string
+
+    const med = {
+      medicament_id,
+      name,
+      price,
+      expiration_date,
+      image_url,
+    }
+
+    // fetch(`http://127.0.0.1:3333/med/${med.id}/update`, {
+    //   method: "PUT",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     id: formData.get("name"),
+    //     name: med.name,
+    //     price: med.price,
+    //     expiration_date: new Date(med.expiration_date),
+    //     image_url: "https://picsum.photos/200",
+    //   }),
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => console.log(data))
+    //   .catch((err) => console.error(err))
+
+    console.log(med)
+
+    setShowModal(false)
+  }
+
+  const { toast } = useToast()
 
   return (
     <>
@@ -116,7 +121,14 @@ export function DataTableRowActions<TData>({
             <Copy className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Make a copy
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              toast({
+                title: `Medicamento favoritado`,
+                description: `Medicamento de id ${med.id} foi colocado na sua lista de favoritos 🎉`,
+              })
+            }}
+          >
             <Star className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Favorite
           </DropdownMenuItem>
