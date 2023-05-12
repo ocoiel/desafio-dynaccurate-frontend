@@ -4,10 +4,8 @@ import { useState } from "react"
 import { updateMedicament } from "@/service/api"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Row } from "@tanstack/react-table"
-import axios from "axios"
 import { Copy, MoreHorizontal, Pencil, Star, Tags, Trash } from "lucide-react"
 
-import { medSchema } from "@/types/medicament-schema"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import {
@@ -94,6 +92,11 @@ export function DataTableRowActions<TData>({
         queryClient.setQueryData(["medicament"], newMedicaments)
       }
 
+      toast({
+        title: `Medicamento ${medicament.name}`,
+        description: `Medicamento ${medicament.name} foi atualizado com sucesso  ㊙（◉）`,
+      })
+
       return { previousMedicament }
     },
     onError: (err, medicament, context) => {
@@ -101,11 +104,14 @@ export function DataTableRowActions<TData>({
         ["medicament"],
         context?.previousMedicament
       )
+      toast({
+        title: `Medicamento ${medicament.name}`,
+        description: `Medicamento ${medicament.name} não foi atualizado. Erro: ${err} ㊙（◉）`,
+      })
       console.log("Erro: ", err)
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["medicament"] })
-      console.log("Settled: por que meu jesus")
     },
   })
 
@@ -120,17 +126,17 @@ export function DataTableRowActions<TData>({
             className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
           >
             <MoreHorizontal className="h-4 w-4" />
-            <span className="sr-only">Open menu</span>
+            <span className="sr-only">Ações</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem onClick={() => setShowModal(true)}>
             <Pencil className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Edit
+            Editar
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Copy className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Make a copy
+            Ver mais detalhes
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
@@ -141,7 +147,7 @@ export function DataTableRowActions<TData>({
             }}
           >
             <Star className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Favorite
+            Favoritar
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuSub>
@@ -162,7 +168,7 @@ export function DataTableRowActions<TData>({
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <Trash className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Delete
+            Deletar
             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -171,11 +177,9 @@ export function DataTableRowActions<TData>({
         <Dialog open={showModal}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Are you sure absolutely sure?</DialogTitle>
+              <DialogTitle>Editar medicamento - {med.name}</DialogTitle>
               <DialogDescription>
-                This action cannot be undone. This will permanently delete your{" "}
-                {med.id}
-                {/* account and remove your data from our servers. {medicament_id} */}
+                Preencha com as modificacoes que voce deseja fazer. ID: {med.id}
               </DialogDescription>
             </DialogHeader>
             <div className="p-6">
@@ -183,12 +187,7 @@ export function DataTableRowActions<TData>({
                 onSubmit={(e) => {
                   e.preventDefault()
                   mutate(drug)
-                  console.log("global: ", drug)
                   setShowModal(false)
-                  toast({
-                    title: `Medicamento atualizado`,
-                    description: `Medicamento de id ${med.id} foi atualizado ✨`,
-                  })
                 }}
                 className="flex flex-col gap-2"
               >

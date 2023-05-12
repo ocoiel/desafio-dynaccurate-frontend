@@ -18,8 +18,6 @@ export function ListMedicaments() {
     queryFn: getMedicaments,
   })
 
-  // console.log(medicaments)
-
   return (
     <>
       {isLoading && <>Carregando...</>}

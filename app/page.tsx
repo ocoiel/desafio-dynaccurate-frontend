@@ -7,9 +7,8 @@ import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
+import { Icons } from "@/components/icons"
 import { ListMedicaments } from "@/components/list-medicaments"
-
-// export const dynamic = "force-dynamic"
 
 export default function IndexPage() {
   return (
@@ -30,7 +29,7 @@ export default function IndexPage() {
           rel="noreferrer"
           className={buttonVariants({ size: "lg" })}
         >
-          Criar novo medicamento
+          <Icons.add className="mr-3 h-6 w-6" /> Criar novo medicamento
         </Link>
         <Link
           target="_blank"
