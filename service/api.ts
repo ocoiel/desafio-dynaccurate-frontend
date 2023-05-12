@@ -24,12 +24,12 @@ async function createMedicament(medicament: Medicaments): Promise<void> {
 async function updateMedicament(
   medicament: Medicaments,
   medicament_id: string
-): Promise<Medicaments> {
+): Promise<void> {
   const response = await axios.put<Medicaments>(
     `${BASE_URL}/med/${medicament_id}/update`,
     medicament
   )
-  return response.data
+  // return response.data
 }
 
 async function deleteMedicament(medicament_id: string): Promise<void> {

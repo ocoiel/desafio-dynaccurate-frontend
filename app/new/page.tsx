@@ -1,11 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { revalidatePath, revalidateTag } from "next/cache"
+import { createMedicament } from "@/service/api"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useForm, type FieldError } from "react-hook-form"
 
 import { Medicaments, medSchema } from "@/types/medicament-schema"
+import { useToast } from "@/hooks/use-toast"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -56,23 +58,36 @@ export default function CreateMedicament(medicament?: Medicaments) {
   })
 
   // The onSubmit function is invoked by RHF only if the validation is OK.
-  function onSubmit(medicament: Omit<Medicaments, "id">) {
-    fetch("http://127.0.0.1:3333/med/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: medicament.name,
-        price: medicament.price,
-        expiration_date: new Date(medicament.expiration_date),
-        image_url: "https://picsum.photos/200",
-      }),
+  function onSubmit(medicament: Omit<Medicament, "id">) {
+    mutate(medicament as Medicament)
+    console.log(medicament)
+    toast({
+      title: "Medicamento criado com sucesso!",
+      duration: 3000,
     })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-      .then(() => revalidatePath("/"))
-      .then(() => revalidateTag("medicament"))
-      .catch((err) => console.error(err))
   }
+
+  const queryClient = useQueryClient()
+
+  interface Medicament {
+    id: string
+    name: string
+    price: number
+    expiration_date: Date
+    image_url: string
+  }
+
+  const { mutate } = useMutation({
+    mutationFn: (medicament: Medicament) => createMedicament(medicament),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["medicament"],
+      })
+      console.log("Settled: NEW por que meu jesus")
+    },
+  })
+
+  const { toast } = useToast()
 
   return (
     <div className="mb-4 p-4">
@@ -145,12 +160,23 @@ export default function CreateMedicament(medicament?: Medicaments) {
               <Input
                 type="date"
                 placeholder="Data de validade"
-                {...register("expiration_date")}
+                {...register("expiration_date", {
+                  valueAsDate: true,
+                })}
                 aria-invalid={Boolean(errors.expiration_date)}
               />
               <AlertInput>{errors?.expiration_date?.message}</AlertInput>
             </div>
           </div>
+          <Label htmlFor="image_url">URL Imagem</Label>
+          <Input
+            type="text"
+            placeholder="URL Imagem"
+            id="image_url"
+            {...register("image_url")}
+            aria-invalid={Boolean(errors.image_url)}
+          />
+          <AlertInput>{errors?.image_url?.message}</AlertInput>
         </div>
         <input
           type="submit"

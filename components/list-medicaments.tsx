@@ -17,7 +17,7 @@ export function ListMedicaments() {
     queryFn: getMedicaments,
   })
 
-  console.log(medicaments)
+  // console.log(medicaments)
 
   return (
     <>

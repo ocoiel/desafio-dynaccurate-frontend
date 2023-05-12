@@ -1,12 +1,13 @@
 "use client"
 
-import { FormEvent, useState } from "react"
-import { revalidatePath, revalidateTag } from "next/cache"
-import { DialogClose } from "@radix-ui/react-dialog"
+import { useState } from "react"
+import { updateMedicament } from "@/service/api"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Row } from "@tanstack/react-table"
+import axios from "axios"
 import { Copy, MoreHorizontal, Pencil, Star, Tags, Trash } from "lucide-react"
 
-import { Medicaments, medSchema } from "@/types/medicament-schema"
+import { medSchema } from "@/types/medicament-schema"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import {
@@ -56,49 +57,57 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
+  const med = row.original as Medicament
+
   const [showModal, setShowModal] = useState(false)
-  const med = medSchema.parse(row.original)
+  const [drug, setDrug] = useState(med)
 
-  function updateMedicament(
-    e: React.FormEvent<HTMLFormElement>,
-    medicament_id: string
-  ) {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const name = formData.get("name") as string
-    const price = formData.get("price") as string
-    const expiration_date_string = formData.get("expiration_date") as string
-    const expiration_date = new Date(expiration_date_string)
-    const image_url = formData.get("image_url") as string
+  const queryClient = useQueryClient()
 
-    fetch(`http://127.0.0.1:3333/med/${med.id}/update`, {
-      method: "PUT",
-      next: {
-        tags: ["medicament"],
-      },
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: medicament_id,
-        name,
-        price,
-        expiration_date,
-        image_url,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log(data))
-      .then(() => revalidatePath("/"))
-      .then(() => revalidateTag("medicament"))
-      .catch((err) => console.error(err))
-
-    console.log("global: ", med)
-
-    setShowModal(false)
-    toast({
-      title: `Medicamento atualizado`,
-      description: `Medicamento de id ${medicament_id} foi atualizado ✨`,
-    })
+  interface Medicament {
+    id: string
+    name: string
+    price: number
+    expiration_date: Date
+    image_url: string
   }
+
+  const { mutate } = useMutation({
+    mutationFn: async (medicament: Medicament) =>
+      updateMedicament(medicament, med.id),
+    onMutate: async (medicament) => {
+      await queryClient.cancelQueries({
+        queryKey: ["medicament"],
+      })
+
+      const previousMedicament = queryClient.getQueryData<Medicament[]>([
+        "medicament",
+      ])
+
+      // optmistic update
+      if (previousMedicament) {
+        const newMedicaments: Medicament[] = previousMedicament.map((old) => {
+          if (old.id === medicament.id) {
+            return medicament
+          } else return old
+        })
+        queryClient.setQueryData(["medicament"], newMedicaments)
+      }
+
+      return { previousMedicament }
+    },
+    onError: (err, medicament, context) => {
+      queryClient.setQueryData<Medicament[]>(
+        ["medicament"],
+        context?.previousMedicament
+      )
+      console.log("Erro: ", err)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["medicament"] })
+      console.log("Settled: por que meu jesus")
+    },
+  })
 
   const { toast } = useToast()
 
@@ -141,7 +150,7 @@ export function DataTableRowActions<TData>({
               Labels
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent className="p-0">
-              <DropdownMenuRadioGroup value={med.label!}>
+              <DropdownMenuRadioGroup>
                 {labels.map((label) => (
                   <DropdownMenuRadioItem key={label.value} value={label.value}>
                     {label.label}
@@ -171,7 +180,16 @@ export function DataTableRowActions<TData>({
             </DialogHeader>
             <div className="p-6">
               <form
-                onSubmit={(e) => updateMedicament(e, med.id)}
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  mutate(drug)
+                  console.log("global: ", drug)
+                  setShowModal(false)
+                  toast({
+                    title: `Medicamento atualizado`,
+                    description: `Medicamento de id ${med.id} foi atualizado ✨`,
+                  })
+                }}
                 className="flex flex-col gap-2"
               >
                 <Label htmlFor="name"></Label>
@@ -180,6 +198,7 @@ export function DataTableRowActions<TData>({
                   name="name"
                   type="text"
                   defaultValue={med.name}
+                  onChange={(e) => setDrug({ ...drug, name: e.target.value })}
                 />
 
                 <Label htmlFor="price"></Label>
@@ -188,6 +207,9 @@ export function DataTableRowActions<TData>({
                   name="price"
                   type="number"
                   defaultValue={med.price}
+                  onChange={(e) =>
+                    setDrug({ ...drug, price: Number(e.target.value) })
+                  }
                 />
 
                 <Label htmlFor="expiration_date"></Label>
@@ -195,7 +217,15 @@ export function DataTableRowActions<TData>({
                   id="expiration_date"
                   type="date"
                   name="expiration_date"
-                  defaultValue={med.expiration_date}
+                  defaultValue={new Date(
+                    med.expiration_date
+                  ).toLocaleDateString()}
+                  onChange={(e) =>
+                    setDrug({
+                      ...drug,
+                      expiration_date: new Date(e.target.value),
+                    })
+                  }
                 />
                 <Label htmlFor="image_url"></Label>
                 <Input
@@ -203,6 +233,9 @@ export function DataTableRowActions<TData>({
                   name="image_url"
                   type="text"
                   defaultValue={med.image_url!}
+                  onChange={(e) =>
+                    setDrug({ ...drug, image_url: e.target.value })
+                  }
                 />
                 <Button type="submit">Atualizar</Button>
                 <Button

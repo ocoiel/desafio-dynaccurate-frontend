@@ -1,5 +1,8 @@
 "use client"
 
+import { updateMedicament } from "@/service/api"
+import getQueryClient from "@/utils/getQueryClient"
+import { useMutation } from "@tanstack/react-query"
 import { Table } from "@tanstack/react-table"
 import { X } from "lucide-react"
 
