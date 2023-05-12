@@ -39,7 +39,7 @@ const AlertInput = ({ children }: { children: React.ReactNode }) =>
     </span>
   ) : null
 
-export default function CreateMedicament() {
+export default function CreateMedicament(medicament?: Medicaments) {
   const [hasDescription, setHasDescription] = useState(false)
 
   const {
@@ -49,6 +49,9 @@ export default function CreateMedicament() {
     formState: { errors, isSubmitting, isSubmitted, isDirty, isValid },
   } = useForm<Omit<Medicaments, "id">>({
     mode: "onChange",
+    defaultValues: {
+      name: medicament?.name,
+    },
     resolver: zodResolver(medSchema.omit({ id: true })),
   })
 
