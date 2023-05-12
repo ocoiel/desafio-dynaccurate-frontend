@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { updateMedicament } from "@/service/api"
+import { deleteMedicament, updateMedicament } from "@/service/api"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Row } from "@tanstack/react-table"
 import { Copy, MoreHorizontal, Pencil, Star, Tags, Trash } from "lucide-react"
@@ -22,6 +22,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog"
 import {
   Dialog,
   DialogContent,
@@ -58,6 +68,7 @@ export function DataTableRowActions<TData>({
   const med = row.original as Medicament
 
   const [showModal, setShowModal] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
   const [drug, setDrug] = useState(med)
 
   const queryClient = useQueryClient()
@@ -70,7 +81,7 @@ export function DataTableRowActions<TData>({
     image_url: string
   }
 
-  const { mutate } = useMutation({
+  const { mutate: updateMedicamentMutation } = useMutation({
     mutationFn: async (medicament: Medicament) =>
       updateMedicament(medicament, med.id),
     onMutate: async (medicament) => {
@@ -112,6 +123,26 @@ export function DataTableRowActions<TData>({
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["medicament"] })
+    },
+  })
+
+  const { mutate: deleteMedicamentMutation } = useMutation({
+    mutationFn: async (medicament_id: string) =>
+      deleteMedicament(medicament_id),
+    onMutate: () => {
+      queryClient.invalidateQueries({ queryKey: ["medicament"] })
+
+      toast({
+        title: `Medicamento ${med.name}`,
+        description: `Medicamento ${med.name} foi removido com sucesso  ㊙（◉）`,
+        variant: "destructive",
+      })
+    },
+    onError: (err) => {
+      toast({
+        title: `Medicamento ${med.name}`,
+        description: `Medicamento ${med.name} não foi removido. Erro: ${err}`,
+      })
     },
   })
 
@@ -166,7 +197,7 @@ export function DataTableRowActions<TData>({
             </DropdownMenuSubContent>
           </DropdownMenuSub>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setShowAlert(true)}>
             <Trash className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Deletar
             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
@@ -186,7 +217,7 @@ export function DataTableRowActions<TData>({
               <form
                 onSubmit={(e) => {
                   e.preventDefault()
-                  mutate(drug)
+                  updateMedicamentMutation(drug)
                   setShowModal(false)
                 }}
                 className="flex flex-col gap-2"
@@ -247,6 +278,39 @@ export function DataTableRowActions<TData>({
             </div>
           </DialogContent>
         </Dialog>
+      )}
+      {showAlert && (
+        <AlertDialog open={showAlert}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Tem certeza que quer deletar esse medicamento?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Esta acao nao pode ser revertida e o medicamento {med.id} sera
+                deletado permanentemente.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setShowAlert(false)}>
+                Voltar
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  deleteMedicamentMutation(med.id)
+                  setShowAlert(false)
+                  toast({
+                    title: `Medicamento ${med.name}`,
+                    description: `Medicamento ${med.name} foi deletado com sucesso ㊙（◉）`,
+                  })
+                }}
+                className="hover:bg-red-500 hover:text-white"
+              >
+                Deletar
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       )}
     </>
   )
