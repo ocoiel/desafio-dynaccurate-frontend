@@ -21,11 +21,8 @@ const formatErrors = (errors: Record<string, FieldError>) =>
     message: errors[key].message,
   }))
 
-/* ---------- Some UI components ----------*/
-
 type AlertType = "error" | "warning" | "success"
 
-// Global Alert div.
 const Alert = ({ children, type }: { children: string; type: AlertType }) => {
   const backgroundColor =
     type === "error" ? "tomato" : type === "warning" ? "orange" : "powderBlue"
@@ -33,7 +30,6 @@ const Alert = ({ children, type }: { children: string; type: AlertType }) => {
   return <div style={{ padding: "0 10", backgroundColor }}>{children}</div>
 }
 
-// Use role="alert" to announce the error message.
 const AlertInput = ({ children }: { children: React.ReactNode }) =>
   Boolean(children) ? (
     <span role="alert" style={{ color: "tomato" }}>
@@ -41,7 +37,7 @@ const AlertInput = ({ children }: { children: React.ReactNode }) =>
     </span>
   ) : null
 
-export default function CreateMedicament(medicament?: Medicaments) {
+export default function CreateMedicament() {
   const [hasDescription, setHasDescription] = useState(false)
 
   const {
@@ -51,15 +47,13 @@ export default function CreateMedicament(medicament?: Medicaments) {
     formState: { errors, isSubmitting, isSubmitted, isDirty, isValid },
   } = useForm<Omit<Medicaments, "id">>({
     mode: "onChange",
-    defaultValues: {
-      name: medicament?.name,
-    },
     resolver: zodResolver(medSchema.omit({ id: true })),
   })
 
   // The onSubmit function is invoked by RHF only if the validation is OK.
   function onSubmit(medicament: Omit<Medicament, "id">) {
     mutate(medicament as Medicament)
+    console.log("data fofa: ", data)
     console.log(medicament)
     toast({
       title: "Medicamento criado com sucesso!",
@@ -77,124 +71,147 @@ export default function CreateMedicament(medicament?: Medicaments) {
     image_url: string
   }
 
-  const { mutate } = useMutation({
+  const { mutate, data } = useMutation({
+    mutationKey: ["newMedicament"],
     mutationFn: (medicament: Medicament) => createMedicament(medicament),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["medicament"],
       })
-      console.log("Settled: NEW por que meu jesus")
     },
   })
 
   const { toast } = useToast()
 
   return (
-    <div className="mb-4 p-4">
-      <h2 className="mt-8 scroll-m-20 text-center text-3xl font-semibold tracking-tight">
-        Crie o medicamento
-      </h2>
-      <p className="text-center text-base text-slate-500 dark:text-slate-400">
-        Preencha os campos abaixo para cadastrar o medicamento.
-      </p>
+    <>
+      {!isSubmitted ? (
+        <div className="mb-4 p-4">
+          <p className="text-center text-base text-slate-500 dark:text-slate-400">
+            Parte 1
+          </p>
+          <h2 className="mt-8 scroll-m-20 text-center text-3xl font-semibold tracking-tight">
+            Crie o medicamento
+          </h2>
+          <p className="text-center text-base text-slate-500 dark:text-slate-400">
+            Preencha os campos abaixo para cadastrar o medicamento.
+          </p>
 
-      {Boolean(Object.keys(errors)?.length) && (
-        <Alert type="error">There are errors in the form.</Alert>
-      )}
+          {Boolean(Object.keys(errors)?.length) && (
+            <Alert type="error">There are errors in the form.</Alert>
+          )}
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="m-6 flex max-w-3xl flex-col rounded-lg border border-t-4 border-border bg-background p-6 md:mx-auto"
-        noValidate
-      >
-        {/* use aria-invalid to indicate field contain error for accessiblity reasons. */}
-        <div className="flex w-full flex-col space-y-4">
-          <Label htmlFor="name">Nome</Label>
-          <Input
-            type="text"
-            placeholder="Nome do medicamento"
-            id="name"
-            aria-invalid={Boolean(errors.name)}
-            autoFocus
-            required
-            {...register("name")}
-          />
-          {/* <AlertInput>{errors?.firstName?.message}</AlertInput> */}
-
-          <span
-            onClick={() => setHasDescription(!hasDescription)}
-            className="flex w-52 cursor-pointer items-center text-sm text-neutral-500 transition-colors duration-100 hover:text-neutral-400"
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="m-6 flex max-w-3xl flex-col rounded-lg border border-t-4 border-border bg-background p-6 md:mx-auto"
+            noValidate
           >
-            <Icons.add className="mr-1 h-4 w-4" />
-            {hasDescription ? "Remover descrição" : "Adicionar descrição"}
-          </span>
-          {hasDescription && (
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="description">
-                Descrição <span className="text-neutral-500">(opcional)</span>
-              </Label>{" "}
-              <Textarea
-                placeholder="Fale mais, fale mais 👀"
-                {...register("description")}
-              />
-            </div>
-          )}
-
-          <div className="flex w-full flex-row justify-around gap-x-4">
-            <div className="w-full">
-              <Label>Preço</Label>
+            {/* use aria-invalid to indicate field contain error for accessiblity reasons. */}
+            <div className="flex w-full flex-col space-y-4">
+              <Label htmlFor="name">Nome</Label>
               <Input
-                type="number"
-                placeholder="Preço"
-                aria-invalid={Boolean(errors.price)}
-                {...register("price", {
-                  valueAsNumber: true,
-                  min: 0,
-                })}
+                type="text"
+                placeholder="Nome do medicamento"
+                id="name"
+                aria-invalid={Boolean(errors.name)}
+                autoFocus
+                required
+                {...register("name")}
               />
-              <AlertInput>{errors?.price?.message}</AlertInput>
-            </div>
+              <AlertInput>{errors?.name?.message}</AlertInput>
 
-            <div className="w-full">
-              <Label>Data de validade</Label>
+              <span
+                onClick={() => setHasDescription(!hasDescription)}
+                className="flex w-52 cursor-pointer items-center text-sm text-neutral-500 transition-colors duration-100 hover:text-neutral-400"
+              >
+                <Icons.add className="mr-1 h-4 w-4" />
+                {hasDescription ? "Remover descrição" : "Adicionar descrição"}
+              </span>
+              {hasDescription && (
+                <div className="flex flex-col space-y-2">
+                  <Label htmlFor="description">
+                    Descrição{" "}
+                    <span className="text-neutral-500">(opcional)</span>
+                  </Label>{" "}
+                  <Textarea
+                    placeholder="Fale mais, fale mais 👀"
+                    {...register("description")}
+                  />
+                </div>
+              )}
+
+              <div className="flex w-full flex-row justify-around gap-x-4">
+                <div className="w-full">
+                  <Label>Preço</Label>
+                  <Input
+                    type="number"
+                    placeholder="Preço"
+                    aria-invalid={Boolean(errors.price)}
+                    {...register("price", {
+                      valueAsNumber: true,
+                      min: 0,
+                    })}
+                  />
+                  <AlertInput>{errors?.price?.message}</AlertInput>
+                </div>
+
+                <div className="w-full">
+                  <Label>Data de validade</Label>
+                  <Input
+                    type="date"
+                    placeholder="Data de validade"
+                    {...register("expiration_date", {
+                      valueAsDate: true,
+                    })}
+                    aria-invalid={Boolean(errors.expiration_date)}
+                  />
+                  <AlertInput>{errors?.expiration_date?.message}</AlertInput>
+                </div>
+              </div>
+              <Label htmlFor="image_url">URL Imagem</Label>
               <Input
-                type="date"
-                placeholder="Data de validade"
-                {...register("expiration_date", {
-                  valueAsDate: true,
-                })}
-                aria-invalid={Boolean(errors.expiration_date)}
+                type="text"
+                placeholder="URL Imagem"
+                id="image_url"
+                {...register("image_url")}
+                aria-invalid={Boolean(errors.image_url)}
               />
-              <AlertInput>{errors?.expiration_date?.message}</AlertInput>
+              <AlertInput>{errors?.image_url?.message}</AlertInput>
             </div>
-          </div>
-          <Label htmlFor="image_url">URL Imagem</Label>
-          <Input
-            type="text"
-            placeholder="URL Imagem"
-            id="image_url"
-            {...register("image_url")}
-            aria-invalid={Boolean(errors.image_url)}
-          />
-          <AlertInput>{errors?.image_url?.message}</AlertInput>
+            <input
+              type="submit"
+              title="koeeee"
+              disabled={isSubmitting || !isValid}
+            />
+            <pre>{JSON.stringify(formatErrors, null, 2)}</pre>
+            <pre>{JSON.stringify(watch(), null, 2)}</pre>
+            <pre>
+              formState ={" "}
+              {JSON.stringify(
+                { isSubmitting, isSubmitted, isDirty, isValid },
+                null,
+                2
+              )}
+            </pre>
+          </form>
         </div>
-        <input
-          type="submit"
-          title="koeeee"
-          disabled={isSubmitting || !isValid}
-        />
-        <pre>{JSON.stringify(formatErrors, null, 2)}</pre>
-        <pre>{JSON.stringify(watch(), null, 2)}</pre>
-        <pre>
-          formState ={" "}
-          {JSON.stringify(
-            { isSubmitting, isSubmitted, isDirty, isValid },
-            null,
-            2
-          )}
-        </pre>
-        {/* <Uploader medicament_id="" /> */}
-      </form>
-    </div>
+      ) : (
+        <div className="">
+          <p className="text-center text-base text-slate-500 dark:text-slate-400">
+            Parte 1
+          </p>
+          <h2 className="mt-8 scroll-m-20 text-center text-3xl font-semibold tracking-tight">
+            Faça upload da imagem do medicamento
+          </h2>
+          <p className="mb-4 text-center text-base text-slate-500 dark:text-slate-400">
+            Arraste e solte o arquivo ou clique no botão abaixo para começar o
+            upload
+          </p>
+          <div className="my-12 w-full items-center justify-center px-36">
+            <Uploader medicament_id="" />
+          </div>
+        </div>
+      )}
+    </>
   )
 }

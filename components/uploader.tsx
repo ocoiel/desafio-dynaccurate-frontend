@@ -9,6 +9,7 @@ import { FilePond, FilePondProps, registerPlugin } from "react-filepond"
 import "filepond/dist/filepond.min.css"
 import "filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css"
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+import { useQuery } from "@tanstack/react-query"
 
 registerPlugin(
   FilePondPluginImageExifOrientation,
@@ -19,6 +20,12 @@ registerPlugin(
 
 export function Uploader({ medicament_id }: { medicament_id: string }) {
   const [files, setFiles] = useState<any>()
+
+  const { data } = useQuery({
+    queryKey: ["newMedicament"],
+  })
+
+  console.log("AQUI BOBAO: ", data)
 
   return (
     <>
@@ -41,7 +48,7 @@ export function Uploader({ medicament_id }: { medicament_id: string }) {
           setFiles(files)
           console.log(files)
         }}
-        labelIdle='ALOBA or <span class="filepond--label-action">Browse</span>'
+        labelIdle='Arraste e solte uma imagem aqui ou <span class="filepond--label-action">Procurar</span>'
         server={{
           process: {
             url: `http://127.0.0.1:3333/med/${medicament_id}/upload-image`,
