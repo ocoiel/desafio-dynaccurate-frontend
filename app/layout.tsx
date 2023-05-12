@@ -5,6 +5,7 @@ import NextTopLoader from "nextjs-toploader"
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
+import TanstackProvider from "@/components/providers/tanstack-provider"
 import { ToastProvider } from "@/components/providers/toast-provider"
 import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
@@ -42,20 +43,22 @@ export default function RootLayout({ children }: RootLayoutProps) {
             fontSans.variable
           )}
         >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="relative flex min-h-screen flex-col">
-              <NextTopLoader
-                showSpinner={false}
-                color="#fff"
-                shadow="0 0 10px #fff, 0 0 12px #fff"
-              />
-              <SiteHeader />
-              <ToastProvider>
-                <div className="flex-1">{children}</div>
-              </ToastProvider>
-            </div>
-            <TailwindIndicator />
-          </ThemeProvider>
+          <TanstackProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <div className="relative flex min-h-screen flex-col">
+                <NextTopLoader
+                  showSpinner={false}
+                  color="#fff"
+                  shadow="0 0 10px #fff, 0 0 12px #fff"
+                />
+                <SiteHeader />
+                <ToastProvider>
+                  <div className="flex-1">{children}</div>
+                </ToastProvider>
+              </div>
+              <TailwindIndicator />
+            </ThemeProvider>
+          </TanstackProvider>
         </body>
       </html>
     </>
