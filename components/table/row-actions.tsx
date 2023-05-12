@@ -1,10 +1,19 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { deleteMedicament, updateMedicament } from "@/service/api"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Row } from "@tanstack/react-table"
-import { Copy, MoreHorizontal, Pencil, Star, Tags, Trash } from "lucide-react"
+import {
+  Copy,
+  Link2,
+  MoreHorizontal,
+  Pencil,
+  Star,
+  Tags,
+  Trash,
+} from "lucide-react"
 
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
@@ -38,25 +47,10 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../ui/dialog"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
-
-export const labels = [
-  {
-    value: "bug",
-    label: "Bug",
-  },
-  {
-    value: "feature",
-    label: "Feature",
-  },
-  {
-    value: "documentation",
-    label: "Documentation",
-  },
-]
+import { labels } from "./data"
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -147,6 +141,7 @@ export function DataTableRowActions<TData>({
   })
 
   const { toast } = useToast()
+  const router = useRouter()
 
   return (
     <>
@@ -165,8 +160,10 @@ export function DataTableRowActions<TData>({
             <Pencil className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Editar
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Copy className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          <DropdownMenuItem
+            onClick={() => router.push(`/medicament/${med.id}`)}
+          >
+            <Link2 className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Ver mais detalhes
           </DropdownMenuItem>
           <DropdownMenuItem
