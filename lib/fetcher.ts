@@ -2,7 +2,7 @@ import { Medicaments } from "@/types/medicament-schema"
 
 export async function fetcher<T>(url: string, tags?: string[]): Promise<T> {
   const res = await fetch(url, {
-    cache: "no-store",
+    // cache: "no-store",
     next: {
       tags,
     },

@@ -1,6 +1,7 @@
 "use client"
 
 import { FormEvent, useState } from "react"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { DialogClose } from "@radix-ui/react-dialog"
 import { Row } from "@tanstack/react-table"
 import { Copy, MoreHorizontal, Pencil, Star, Tags, Trash } from "lucide-react"
@@ -70,32 +71,33 @@ export function DataTableRowActions<TData>({
     const expiration_date = new Date(expiration_date_string)
     const image_url = formData.get("image_url") as string
 
-    const med = {
-      medicament_id,
-      name,
-      price,
-      expiration_date,
-      image_url,
-    }
+    fetch(`http://127.0.0.1:3333/med/${med.id}/update`, {
+      method: "PUT",
+      next: {
+        tags: ["medicament"],
+      },
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: medicament_id,
+        name,
+        price,
+        expiration_date,
+        image_url,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .then(() => revalidatePath("/"))
+      .then(() => revalidateTag("medicament"))
+      .catch((err) => console.error(err))
 
-    // fetch(`http://127.0.0.1:3333/med/${med.id}/update`, {
-    //   method: "PUT",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     id: formData.get("name"),
-    //     name: med.name,
-    //     price: med.price,
-    //     expiration_date: new Date(med.expiration_date),
-    //     image_url: "https://picsum.photos/200",
-    //   }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => console.log(data))
-    //   .catch((err) => console.error(err))
-
-    console.log(med)
+    console.log("global: ", med)
 
     setShowModal(false)
+    toast({
+      title: `Medicamento atualizado`,
+      description: `Medicamento de id ${medicament_id} foi atualizado ✨`,
+    })
   }
 
   const { toast } = useToast()
