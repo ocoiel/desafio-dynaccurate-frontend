@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Icons } from "@/components/icons"
-import { Uploader } from "@/components/uploader"
+import { UploaderMemo } from "@/components/uploader"
 
 // JSON.stringify(error) will not work, because of circulare structure. So we need this helper.
 const formatErrors = (errors: Record<string, FieldError>) =>
@@ -62,14 +62,6 @@ export default function CreateMedicament() {
   }
 
   const queryClient = useQueryClient()
-
-  // interface Medicament {
-  //   id: string
-  //   name: string
-  //   price: number
-  //   expiration_date: Date
-  //   image_url: string
-  // }
 
   const { mutateAsync, data } = useMutation({
     mutationKey: ["newMedicament"],
@@ -212,7 +204,7 @@ export default function CreateMedicament() {
             upload
           </p>
           <div className="my-12 w-full items-center justify-center px-36">
-            <Uploader medicament_id={data?.id} />
+            <UploaderMemo medicament_id={data?.id} />
           </div>
         </div>
       )}
