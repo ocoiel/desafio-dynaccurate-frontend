@@ -15,7 +15,7 @@ import "@uppy/progress-bar/dist/style.min.css"
 import { DashboardProps } from "@uppy/react/src/Dashboard"
 
 interface UploaderProps {
-  medicament_id: string
+  medicament_id: string | undefined
 }
 export function Uploader({ medicament_id }: UploaderProps) {
   const dashRef = useRef<DashboardProps>(null)

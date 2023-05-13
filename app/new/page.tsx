@@ -89,7 +89,6 @@ export default function CreateMedicament() {
     <>
       {!isSubmitted ? (
         <div className="mb-4 p-4">
-          <Uploader medicament_id="fb948312-1460-40ad-9799-4599a1eed73f" />
           <p className="text-center text-base text-slate-500 dark:text-slate-400">
             Parte 1
           </p>
@@ -109,13 +108,6 @@ export default function CreateMedicament() {
             className="m-6 flex max-w-3xl flex-col rounded-lg border border-t-4 border-border bg-background p-6 md:mx-auto"
             noValidate
           >
-            {/* Test ID pass */}
-            {/* <input
-              type="hidden"
-              value={watch("id") || "blablalogia"}
-              {...register("id")}
-            /> */}
-
             {/* use aria-invalid to indicate field contain error for accessiblity reasons. */}
             <div className="flex w-full flex-col space-y-4">
               <Label htmlFor="name">Nome</Label>
@@ -220,8 +212,7 @@ export default function CreateMedicament() {
             upload
           </p>
           <div className="my-12 w-full items-center justify-center px-36">
-            {/* <Uploader medicament_id={data?.id} /> */}
-            {/* <Input type="file" accept="image/*" id="image_url" /> */}
+            <Uploader medicament_id={data?.id} />
           </div>
         </div>
       )}
