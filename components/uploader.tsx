@@ -1,76 +1,45 @@
-import { useState } from "react"
-import FilePondePluginFileEncode from "filepond-plugin-file-encode"
-// Import FilePond styles
-import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size"
-import FilePondPluginImageEdit from "filepond-plugin-image-edit"
-import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation"
-import FilePondPluginImagePreview from "filepond-plugin-image-preview"
-import { FilePond, registerPlugin } from "react-filepond"
+"use client"
 
-import "filepond/dist/filepond.min.css"
-import "filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css"
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+import { useRef } from "react"
+import Uppy, { UploadedUppyFile } from "@uppy/core"
+import DashboardPlugin from "@uppy/dashboard"
+import ImageEditor from "@uppy/image-editor"
+import { Dashboard, DragDrop, ProgressBar, StatusBar } from "@uppy/react"
+import xhr from "@uppy/xhr-upload"
 
-registerPlugin(
-  FilePondPluginImageExifOrientation,
-  FilePondPluginImagePreview,
-  FilePondPluginFileValidateSize,
-  FilePondPluginImageEdit,
-  FilePondePluginFileEncode
-)
+import "@uppy/core/dist/style.min.css"
+import "@uppy/dashboard/dist/style.min.css"
+import "@uppy/image-editor/dist/style.min.css"
+import "@uppy/status-bar/dist/style.min.css"
+import "@uppy/progress-bar/dist/style.min.css"
+import { DashboardProps } from "@uppy/react/src/Dashboard"
 
-export function Uploader({
-  medicament_id,
-}: {
-  medicament_id: string | undefined
-}) {
-  const [files, setFiles] = useState<any>()
+interface UploaderProps {
+  medicament_id: string
+}
+export function Uploader({ medicament_id }: UploaderProps) {
+  const dashRef = useRef<DashboardProps>(null)
+  const uppy = new Uppy()
+    .use(DashboardPlugin, { inline: true })
+    .use(ImageEditor, { target: DashboardPlugin })
+    .use(xhr, {
+      endpoint: `http://127.0.0.1:3333/med/${medicament_id}/upload-image`,
+      method: "PUT",
+      formData: true,
+      responseType: "",
+    })
+
+  uppy.on("upload-success", (file, response) => {
+    console.log(response)
+    console.log(file)
+  })
 
   return (
-    <>
-      {!medicament_id ? (
-        <>koe cara ta de zoas ne</>
-      ) : (
-        <FilePond
-          files={files}
-          className={"filepond"}
-          name="filepond"
-          allowImageEdit
-          imageEditAllowEdit
-          instantUpload={false}
-          allowImagePreview
-          allowProcess
-          acceptedFileTypes={["image/*"]}
-          oninit={() => console.log("FilePond initialized")}
-          onaddfile={() => console.log("File added")}
-          allowFileSizeValidation
-          allowImageExifOrientation
-          allowFileEncode
-          onupdatefiles={(file) => {
-            setFiles(file)
-            console.log(file)
-          }}
-          labelIdle='Arraste e solte uma imagem aqui ou <span class="filepond--label-action">Procurar</span>'
-          server={{
-            process: {
-              url: `http://127.0.0.1:3333/med/${medicament_id}/upload-image`,
-              method: "PUT",
-              headers: {
-                "Content-Type": "mutlipart/form-data",
-              },
-              ondata(data) {
-                console.log("process server filepond: ", data)
-                data.append("medicament_id", medicament_id)
-                return data
-              },
-              onload(response) {
-                console.log("response onload: ", response)
-                return response
-              },
-            },
-          }}
-        />
-      )}
-    </>
+    <Dashboard
+      uppy={uppy}
+      id="dashboard"
+      plugins={["DragDrop", "ProgressBar", "ImageEditor"]}
+      theme="auto"
+    />
   )
 }
