@@ -45,14 +45,14 @@ export default function CreateMedicament() {
     handleSubmit,
     watch,
     formState: { errors, isSubmitting, isSubmitted, isDirty, isValid },
-  } = useForm<Omit<Medicaments, "id">>({
+  } = useForm<Medicaments>({
     mode: "onChange",
     resolver: zodResolver(medSchema.omit({ id: true })),
   })
 
   // The onSubmit function is invoked by RHF only if the validation is OK.
-  function onSubmit(medicament: Omit<Medicament, "id">) {
-    mutate(medicament as Medicament)
+  function onSubmit(medicament: Medicaments) {
+    mutateAsync(medicament)
     console.log("data fofa: ", data)
     console.log(medicament)
     toast({
@@ -63,25 +63,27 @@ export default function CreateMedicament() {
 
   const queryClient = useQueryClient()
 
-  interface Medicament {
-    id: string
-    name: string
-    price: number
-    expiration_date: Date
-    image_url: string
-  }
+  // interface Medicament {
+  //   id: string
+  //   name: string
+  //   price: number
+  //   expiration_date: Date
+  //   image_url: string
+  // }
 
-  const { mutate, data } = useMutation({
+  const { mutateAsync, data } = useMutation({
     mutationKey: ["newMedicament"],
-    mutationFn: (medicament: Medicament) => createMedicament(medicament),
-    onSuccess: () => {
+    mutationFn: (medicament: Medicaments) => createMedicament(medicament),
+    onSuccess: (medicament, data) => {
       queryClient.invalidateQueries({
         queryKey: ["medicament"],
       })
+      return data
     },
   })
 
   const { toast } = useToast()
+  console.log("data PLEO AMOR: ", data)
 
   return (
     <>
@@ -106,6 +108,13 @@ export default function CreateMedicament() {
             className="m-6 flex max-w-3xl flex-col rounded-lg border border-t-4 border-border bg-background p-6 md:mx-auto"
             noValidate
           >
+            {/* Test ID pass */}
+            {/* <input
+              type="hidden"
+              value={watch("id") || "blablalogia"}
+              {...register("id")}
+            /> */}
+
             {/* use aria-invalid to indicate field contain error for accessiblity reasons. */}
             <div className="flex w-full flex-col space-y-4">
               <Label htmlFor="name">Nome</Label>
@@ -115,8 +124,10 @@ export default function CreateMedicament() {
                 id="name"
                 aria-invalid={Boolean(errors.name)}
                 autoFocus
-                required
-                {...register("name")}
+                {...register("name", {
+                  required: "Campo obrigatário",
+                  minLength: 2,
+                })}
               />
               <AlertInput>{errors?.name?.message}</AlertInput>
 
@@ -208,7 +219,7 @@ export default function CreateMedicament() {
             upload
           </p>
           <div className="my-12 w-full items-center justify-center px-36">
-            <Uploader medicament_id="" />
+            <Uploader medicament_id={data?.id} />
           </div>
         </div>
       )}

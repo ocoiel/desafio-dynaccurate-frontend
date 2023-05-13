@@ -17,8 +17,13 @@ async function getMedicamentById(medicament_id: string): Promise<Medicaments> {
   return response.data
 }
 
-async function createMedicament(medicament: Medicaments): Promise<void> {
-  await axios.post(`${BASE_URL}/med/create`, medicament)
+async function createMedicament(medicament: Medicaments): Promise<Medicaments> {
+  const response = await axios.post<Medicaments>(
+    `${BASE_URL}/med/create`,
+    medicament
+  )
+
+  return response.data
 }
 
 async function updateMedicament(

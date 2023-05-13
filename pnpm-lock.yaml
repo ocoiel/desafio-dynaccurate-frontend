@@ -58,6 +58,9 @@ dependencies:
   filepond:
     specifier: ^4.30.4
     version: 4.30.4
+  filepond-plugin-file-encode:
+    specifier: ^2.1.10
+    version: 2.1.10(filepond@4.30.4)
   filepond-plugin-file-validate-size:
     specifier: ^2.2.8
     version: 2.2.8(filepond@4.30.4)
@@ -2336,6 +2339,14 @@ packages:
     dependencies:
       flat-cache: 3.0.4
     dev: true
+
+  /filepond-plugin-file-encode@2.1.10(filepond@4.30.4):
+    resolution: {integrity: sha512-SCz6Pvu/30WV2knw+zMuJ4bB+vBE7niMg2Vte3NXY9K5qfBpX0Ido35PKUrxLatSMeWiwVakhwindt2n591jJw==}
+    peerDependencies:
+      filepond: '>=3.x <5.x'
+    dependencies:
+      filepond: 4.30.4
+    dev: false
 
   /filepond-plugin-file-validate-size@2.2.8(filepond@4.30.4):
     resolution: {integrity: sha512-yzb8scATmkWqPTP7oKQz6L8WwJm6Xmgc/fuq6DFGRaLz0I7372BUvBsxagBk/hypMIjvieNzhggm33Y60x3rcw==}
