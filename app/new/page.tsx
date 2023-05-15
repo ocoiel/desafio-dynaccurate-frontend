@@ -84,7 +84,6 @@ export default function CreateMedicament() {
   })
 
   const { toast } = useToast()
-  // console.log("data PLEO AMOR: ", data)
 
   return (
     <>
