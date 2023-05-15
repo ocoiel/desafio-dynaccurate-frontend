@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation"
 import { createMedicament } from "@/service/api"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
 import { useForm, type FieldError } from "react-hook-form"
 
 import { Medicaments, medSchema } from "@/types/medicament-schema"
 import { useToast } from "@/hooks/use-toast"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -55,14 +57,9 @@ export default function CreateMedicament() {
 
   // The onSubmit function is invoked by RHF only if the validation is OK.
   async function onSubmit(medicament: Medicaments) {
-    const { id, image_url } = await mutateAsync(medicament)
+    const { id } = await mutateAsync(medicament)
     setId(id)
-    // router.push(`/upload/${id}`)
-    console.log("data fofa: ", data)
-    // console.log(medicament)
-    console.log("MISERICODIA AQUI ESTA O ID !!!!: ", id)
-    console.log("ESTADO - AQUI ESTA O ID DO STATE !!!!: ", id_state)
-    console.log("img_url", image_url)
+
     toast({
       title: "Medicamento criado com sucesso!",
       duration: 3000,
@@ -78,7 +75,6 @@ export default function CreateMedicament() {
       queryClient.invalidateQueries({
         queryKey: ["medicament"],
       })
-      console.log("dentro do useMutation: data", data)
       return data
     },
   })
@@ -172,28 +168,20 @@ export default function CreateMedicament() {
                   <AlertInput>{errors?.expiration_date?.message}</AlertInput>
                 </div>
               </div>
-              <Label>Imagem URL</Label>
-              <Input
-                type="text"
-                placeholder="Imagem URL"
-                {...register("image_url")}
-              />
             </div>
-            <input
+            {/* <input
               type="submit"
               title="koeeee"
               disabled={isSubmitting || !isValid}
-            />
-            <pre>{JSON.stringify(formatErrors, null, 2)}</pre>
-            <pre>{JSON.stringify(watch(), null, 2)}</pre>
-            <pre>
-              formState ={" "}
-              {JSON.stringify(
-                { isSubmitting, isSubmitted, isDirty, isValid },
-                null,
-                2
-              )}
-            </pre>
+            /> */}
+            <Button
+              type="submit"
+              className="mt-8"
+              disabled={isSubmitting || !isValid}
+            >
+              Próximo
+              <ArrowRightIcon className="mr-2 h-4 w-4" />
+            </Button>
           </form>
         </div>
       ) : (
@@ -209,16 +197,13 @@ export default function CreateMedicament() {
             upload
           </p>
           <div className="my-12 w-full items-center justify-center px-36">
-            ID do estado: {id_state}
-            ID da data.id: {data?.id}
             {id_state.length > 0 || data?.id ? (
               <Dropzone medicament_id={id_state || data?.id} />
             ) : (
-              <>oi meu chapa</>
+              <>Reinicie a página e tente novamente...</>
             )}
           </div>
         </div>
-        // <>eh... vamos mudar tudo</>
       )}
     </>
   )

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import axios from "axios"
 import { ArrowUp, X } from "lucide-react"
 import { useDropzone } from "react-dropzone"
@@ -32,21 +33,25 @@ export const Dropzone: React.FC<DropzoneProps> = ({
   const [files, setFiles] = useState<FileWithPreview[]>([])
   const [rejected, setRejected] = useState<RejectedFile[]>([])
   const { toast } = useToast()
+  const { push } = useRouter()
 
-  const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any) => {
-    if (acceptedFiles?.length) {
-      setFiles((previousFiles) => [
-        ...previousFiles,
-        ...acceptedFiles.map((file) =>
-          Object.assign(file, { preview: URL.createObjectURL(file) })
-        ),
-      ])
-    }
+  const onDrop = useCallback(
+    (acceptedFiles: File[], rejectedFiles: RejectedFile[]) => {
+      if (acceptedFiles?.length) {
+        setFiles((previousFiles) => [
+          ...previousFiles,
+          ...acceptedFiles.map((file) =>
+            Object.assign(file, { preview: URL.createObjectURL(file) })
+          ),
+        ])
+      }
 
-    if (rejectedFiles?.length) {
-      setRejected((previousFiles) => [...previousFiles, ...rejectedFiles])
-    }
-  }, [])
+      if (rejectedFiles?.length) {
+        setRejected((previousFiles) => [...previousFiles, ...rejectedFiles])
+      }
+    },
+    []
+  )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -95,7 +100,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
       title: "Imagem foi enviada com sucesso! 🎉",
     })
 
-    console.log("data from upload image: ", data)
+    push(`/medicament/${medicament_id}`)
   }
 
   return (

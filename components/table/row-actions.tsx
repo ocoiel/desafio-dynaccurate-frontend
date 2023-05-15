@@ -114,7 +114,6 @@ export function DataTableRowActions<TData>({
         title: `Medicamento ${medicament.name}`,
         description: `Medicamento ${medicament.name} não foi atualizado. Erro: ${err} ㊙（◉）`,
       })
-      console.log("Erro: ", err)
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["medicament"] })
