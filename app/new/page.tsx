@@ -168,12 +168,26 @@ export default function CreateMedicament() {
                   <AlertInput>{errors?.expiration_date?.message}</AlertInput>
                 </div>
               </div>
+              <div className="flex w-full flex-row justify-around gap-x-4">
+                <div className="w-full">
+                  <Label>Status</Label>
+                  <select>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                </div>
+
+                <div className="w-full">
+                  <Label>Prioridade</Label>
+                  <select>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                </div>
+              </div>
             </div>
-            {/* <input
-              type="submit"
-              title="koeeee"
-              disabled={isSubmitting || !isValid}
-            /> */}
             <Button
               type="submit"
               className="mt-8 gap-2"
