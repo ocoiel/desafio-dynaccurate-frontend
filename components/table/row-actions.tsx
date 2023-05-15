@@ -50,6 +50,7 @@ import {
 } from "../ui/dialog"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
+import { Dropzone } from "../uploader"
 import { labels } from "./data"
 
 interface DataTableRowActionsProps<TData> {

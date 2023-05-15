@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 import Image from "next/image"
 import axios from "axios"
-import { ArrowUpIcon, X } from "lucide-react"
+import { ArrowUp, X } from "lucide-react"
 import { useDropzone } from "react-dropzone"
 
 import { useToast } from "@/hooks/use-toast"
@@ -92,8 +92,10 @@ export const Dropzone: React.FC<DropzoneProps> = ({
     )
 
     toast({
-      title: "Imagem foi enviada com sucesso!",
+      title: "Imagem foi enviada com sucesso! 🎉",
     })
+
+    console.log("data from upload image: ", data)
   }
 
   return (
@@ -105,7 +107,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
       >
         <input {...getInputProps()} />
         <div className="flex flex-col items-center justify-center gap-4">
-          <ArrowUpIcon className="h-5 w-5 fill-current" />
+          <ArrowUp className="h-5 w-5 fill-current" />
           {isDragActive ? (
             <p>Solte aqui! 🚀</p>
           ) : (

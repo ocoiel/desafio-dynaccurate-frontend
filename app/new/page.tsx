@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Icons } from "@/components/icons"
+import { Dropzone } from "@/components/uploader"
 
 // JSON.stringify(error) will not work, because of circulare structure. So we need this helper.
 const formatErrors = (errors: Record<string, FieldError>) =>
@@ -38,6 +39,7 @@ const AlertInput = ({ children }: { children: React.ReactNode }) =>
 
 export default function CreateMedicament() {
   const [hasDescription, setHasDescription] = useState(false)
+  const [id, setId] = useState("")
 
   const {
     register,
@@ -50,10 +52,13 @@ export default function CreateMedicament() {
   })
 
   // The onSubmit function is invoked by RHF only if the validation is OK.
-  function onSubmit(medicament: Medicaments) {
-    mutateAsync(medicament)
+  async function onSubmit(medicament: Medicaments) {
+    const { id } = await mutateAsync(medicament)
+    setId(id)
+
     console.log("data fofa: ", data)
-    console.log(medicament)
+    // console.log(medicament)
+    console.log("MISERICODIA AQUI ESTA O ID!!!!: ", id)
     toast({
       title: "Medicamento criado com sucesso!",
       duration: 3000,
@@ -65,7 +70,7 @@ export default function CreateMedicament() {
   const { mutateAsync, data } = useMutation({
     mutationKey: ["newMedicament"],
     mutationFn: (medicament: Medicaments) => createMedicament(medicament),
-    onSuccess: (medicament, data) => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ["medicament"],
       })
@@ -74,7 +79,7 @@ export default function CreateMedicament() {
   })
 
   const { toast } = useToast()
-  console.log("data PLEO AMOR: ", data)
+  // console.log("data PLEO AMOR: ", data)
 
   return (
     <>
@@ -163,15 +168,6 @@ export default function CreateMedicament() {
                   <AlertInput>{errors?.expiration_date?.message}</AlertInput>
                 </div>
               </div>
-              <Label htmlFor="image_url">URL Imagem</Label>
-              <Input
-                type="text"
-                placeholder="URL Imagem"
-                id="image_url"
-                {...register("image_url")}
-                aria-invalid={Boolean(errors.image_url)}
-              />
-              <AlertInput>{errors?.image_url?.message}</AlertInput>
             </div>
             <input
               type="submit"
@@ -191,21 +187,28 @@ export default function CreateMedicament() {
           </form>
         </div>
       ) : (
-        <div className="">
-          <p className="text-center text-base text-slate-500 dark:text-slate-400">
-            Parte 2
-          </p>
-          <h2 className="mt-8 scroll-m-20 text-center text-3xl font-semibold tracking-tight">
-            Faça upload da imagem do medicamento
-          </h2>
-          <p className="mb-4 text-center text-base text-slate-500 dark:text-slate-400">
-            Arraste e solte o arquivo ou clique no botão abaixo para começar o
-            upload
-          </p>
-          <div className="my-12 w-full items-center justify-center px-36">
-            {/* <UploaderMemo medicament_id={data?.id} /> */}
-          </div>
-        </div>
+        // <div className="">
+        //   <p className="text-center text-base text-slate-500 dark:text-slate-400">
+        //     Parte 2
+        //   </p>
+        //   <h2 className="mt-8 scroll-m-20 text-center text-3xl font-semibold tracking-tight">
+        //     Faça upload da imagem do medicamento
+        //   </h2>
+        //   <p className="mb-4 text-center text-base text-slate-500 dark:text-slate-400">
+        //     Arraste e solte o arquivo ou clique no botão abaixo para começar o
+        //     upload
+        //   </p>
+        //   <div className="my-12 w-full items-center justify-center px-36">
+        //     ID do estado: {id}
+        //     ID da data.id: {data?.id}
+        //     {id.length > 0 ? (
+        //       <Dropzone medicament_id={id} />
+        //     ) : (
+        //       <>oi meu chapa</>
+        //     )}
+        //   </div>
+        // </div>
+        <>eh... vamos mudar tudo</>
       )}
     </>
   )
