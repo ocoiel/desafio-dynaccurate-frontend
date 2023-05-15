@@ -50,7 +50,6 @@ import {
 } from "../ui/dialog"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
-import { UploaderMemo } from "../uploader"
 import { labels } from "./data"
 
 interface DataTableRowActionsProps<TData> {
@@ -267,7 +266,7 @@ export function DataTableRowActions<TData>({
                 />
                 <span className="my-2 text-center text-sm text-muted">or</span>
                 <div className="flex w-fit justify-center">
-                  <UploaderMemo medicament_id={med.id} />
+                  {/* <UploaderMemo medicament_id={med.id} /> */}
                 </div>
                 <Button type="submit">Atualizar</Button>
                 <Button
