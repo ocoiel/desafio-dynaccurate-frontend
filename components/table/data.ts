@@ -26,28 +26,28 @@ export const labels = [
 
 export const statuses = [
   {
-    value: "Ideia",
+    value: "ideia",
     label: "Ideia",
     icon: HelpCircle,
   },
   {
-    value: "A fazer",
-    label: "a fazer",
+    value: "a fazer",
+    label: "A fazer",
     icon: Circle,
   },
   {
-    value: "Em progresso",
-    label: "em progresso",
+    value: "em progresso",
+    label: "Em progresso",
     icon: ArrowUpCircle,
   },
   {
-    value: "Concluído",
-    label: "concluido",
+    value: "concluido",
+    label: "Concluído",
     icon: CheckCircle2,
   },
   {
-    value: "Cancelado",
-    label: "cancelado",
+    value: "cancelado",
+    label: "Cancelado",
     icon: XCircle,
   },
 ]

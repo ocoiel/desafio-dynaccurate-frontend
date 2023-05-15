@@ -45,6 +45,8 @@ export default function Medicament({ params }: { params: { id: string } }) {
           </div>
 
           <div>
+            {/* Bug with URL within Next Image Component */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={medicament.image_url}
               alt={medicament.name}
