@@ -26,46 +26,46 @@ export const labels = [
 
 export const statuses = [
   {
-    value: "backlog",
-    label: "Backlog",
+    value: "Ideia",
+    label: "Ideia",
     icon: HelpCircle,
   },
   {
-    value: "todo",
-    label: "Todo",
+    value: "A fazer",
+    label: "a fazer",
     icon: Circle,
   },
   {
-    value: "in progress",
-    label: "In Progress",
+    value: "Em progresso",
+    label: "em progresso",
     icon: ArrowUpCircle,
   },
   {
-    value: "done",
-    label: "Done",
+    value: "Concluído",
+    label: "concluido",
     icon: CheckCircle2,
   },
   {
-    value: "canceled",
-    label: "Canceled",
+    value: "Cancelado",
+    label: "cancelado",
     icon: XCircle,
   },
 ]
 
 export const priorities = [
   {
-    label: "Low",
-    value: "low",
+    label: "Baixa",
+    value: "baixa",
     icon: ArrowDown,
   },
   {
-    label: "Medium",
-    value: "medium",
+    label: "Média",
+    value: "media",
     icon: ArrowRight,
   },
   {
-    label: "High",
-    value: "high",
+    label: "Alta",
+    value: "alta",
     icon: ArrowUp,
   },
 ]

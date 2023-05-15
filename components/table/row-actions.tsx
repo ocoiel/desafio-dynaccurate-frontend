@@ -254,7 +254,7 @@ export function DataTableRowActions<TData>({
                     })
                   }
                 />
-                <Label htmlFor="image_url"></Label>
+                <Label htmlFor="image_url">URL de nova imagem: </Label>
                 <Input
                   id="image_url"
                   name="image_url"
@@ -265,9 +265,6 @@ export function DataTableRowActions<TData>({
                   }
                 />
                 <span className="my-2 text-center text-sm text-muted">or</span>
-                <div className="flex w-fit justify-center">
-                  <Dropzone medicament_id={med.id} />
-                </div>
                 <Button type="submit">Atualizar</Button>
                 <Button
                   onClick={() => setShowModal(false)}
