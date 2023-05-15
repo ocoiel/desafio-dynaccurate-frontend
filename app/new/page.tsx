@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { createMedicament } from "@/service/api"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { useForm, type FieldError } from "react-hook-form"
 
 import { Medicaments, medSchema } from "@/types/medicament-schema"
@@ -176,11 +176,11 @@ export default function CreateMedicament() {
             /> */}
             <Button
               type="submit"
-              className="mt-8"
+              className="mt-8 gap-2"
               disabled={isSubmitting || !isValid}
             >
-              Próximo
-              <ArrowRightIcon className="mr-2 h-4 w-4" />
+              <span>Próximo</span>
+              <ArrowRight className="mr-4 h-4 w-4" />
             </Button>
           </form>
         </div>
