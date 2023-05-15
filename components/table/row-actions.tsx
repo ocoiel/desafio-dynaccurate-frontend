@@ -267,7 +267,7 @@ export function DataTableRowActions<TData>({
                 />
                 <span className="my-2 text-center text-sm text-muted">or</span>
                 <div className="flex w-fit justify-center">
-                  {/* <UploaderMemo medicament_id={med.id} /> */}
+                  <Dropzone medicament_id={med.id} />
                 </div>
                 <Button type="submit">Atualizar</Button>
                 <Button

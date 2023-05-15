@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { createMedicament } from "@/service/api"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
@@ -39,7 +40,8 @@ const AlertInput = ({ children }: { children: React.ReactNode }) =>
 
 export default function CreateMedicament() {
   const [hasDescription, setHasDescription] = useState(false)
-  const [id, setId] = useState("")
+  const [id_state, setId] = useState("")
+  const router = useRouter()
 
   const {
     register,
@@ -53,12 +55,14 @@ export default function CreateMedicament() {
 
   // The onSubmit function is invoked by RHF only if the validation is OK.
   async function onSubmit(medicament: Medicaments) {
-    const { id } = await mutateAsync(medicament)
+    const { id, image_url } = await mutateAsync(medicament)
     setId(id)
-
+    // router.push(`/upload/${id}`)
     console.log("data fofa: ", data)
     // console.log(medicament)
-    console.log("MISERICODIA AQUI ESTA O ID!!!!: ", id)
+    console.log("MISERICODIA AQUI ESTA O ID !!!!: ", id)
+    console.log("ESTADO - AQUI ESTA O ID DO STATE !!!!: ", id_state)
+    console.log("img_url", image_url)
     toast({
       title: "Medicamento criado com sucesso!",
       duration: 3000,
@@ -74,6 +78,7 @@ export default function CreateMedicament() {
       queryClient.invalidateQueries({
         queryKey: ["medicament"],
       })
+      console.log("dentro do useMutation: data", data)
       return data
     },
   })
@@ -168,6 +173,12 @@ export default function CreateMedicament() {
                   <AlertInput>{errors?.expiration_date?.message}</AlertInput>
                 </div>
               </div>
+              <Label>Imagem URL</Label>
+              <Input
+                type="text"
+                placeholder="Imagem URL"
+                {...register("image_url")}
+              />
             </div>
             <input
               type="submit"
@@ -187,28 +198,28 @@ export default function CreateMedicament() {
           </form>
         </div>
       ) : (
-        // <div className="">
-        //   <p className="text-center text-base text-slate-500 dark:text-slate-400">
-        //     Parte 2
-        //   </p>
-        //   <h2 className="mt-8 scroll-m-20 text-center text-3xl font-semibold tracking-tight">
-        //     Faça upload da imagem do medicamento
-        //   </h2>
-        //   <p className="mb-4 text-center text-base text-slate-500 dark:text-slate-400">
-        //     Arraste e solte o arquivo ou clique no botão abaixo para começar o
-        //     upload
-        //   </p>
-        //   <div className="my-12 w-full items-center justify-center px-36">
-        //     ID do estado: {id}
-        //     ID da data.id: {data?.id}
-        //     {id.length > 0 ? (
-        //       <Dropzone medicament_id={id} />
-        //     ) : (
-        //       <>oi meu chapa</>
-        //     )}
-        //   </div>
-        // </div>
-        <>eh... vamos mudar tudo</>
+        <div className="">
+          <p className="text-center text-base text-slate-500 dark:text-slate-400">
+            Parte 2
+          </p>
+          <h2 className="mt-8 scroll-m-20 text-center text-3xl font-semibold tracking-tight">
+            Faça upload da imagem do medicamento
+          </h2>
+          <p className="mb-4 text-center text-base text-slate-500 dark:text-slate-400">
+            Arraste e solte o arquivo ou clique no botão abaixo para começar o
+            upload
+          </p>
+          <div className="my-12 w-full items-center justify-center px-36">
+            ID do estado: {id_state}
+            ID da data.id: {data?.id}
+            {id_state.length > 0 || data?.id ? (
+              <Dropzone medicament_id={id_state || data?.id} />
+            ) : (
+              <>oi meu chapa</>
+            )}
+          </div>
+        </div>
+        // <>eh... vamos mudar tudo</>
       )}
     </>
   )

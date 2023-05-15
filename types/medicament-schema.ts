@@ -9,7 +9,7 @@ export const medSchema = z.object({
     .refine((val) => val >= 0, { message: "O preço deve ser positivo" }),
   expiration_date: z.date(),
   status: z.string().nullish(),
-  image_url: z.string().nullable(),
+  image_url: z.string(),
   label: z.string().nullish(),
   priority: z.string().nullish(),
   description: z.string().nullish(),

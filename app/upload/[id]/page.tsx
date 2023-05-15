@@ -1,10 +1,11 @@
 import { Dropzone } from "@/components/uploader"
 
-export default function UpPage() {
+export default function UpPage({ params }: { params: { id: string } }) {
   return (
     <>
+      param id: {params.id}
       <Dropzone
-        medicament_id="ff70ce3d-6c62-419c-9ab7-0081a4b041f6"
+        medicament_id={params.id}
         className="mt-10 border border-neutral-200 p-16 dark:bg-neutral-800"
       />
     </>

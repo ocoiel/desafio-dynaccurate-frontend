@@ -21,7 +21,7 @@ interface RejectedFile {
 }
 
 interface DropzoneProps {
-  medicament_id: string
+  medicament_id: string | undefined
   className?: string
 }
 
@@ -77,7 +77,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
-    medicament_id: string
+    medicament_id: string | undefined
   ) => {
     e.preventDefault()
 
