@@ -194,7 +194,7 @@ export default function CreateMedicament() {
       ) : (
         <div className="">
           <p className="text-center text-base text-slate-500 dark:text-slate-400">
-            Parte 1
+            Parte 2
           </p>
           <h2 className="mt-8 scroll-m-20 text-center text-3xl font-semibold tracking-tight">
             Faça upload da imagem do medicamento
@@ -204,7 +204,7 @@ export default function CreateMedicament() {
             upload
           </p>
           <div className="my-12 w-full items-center justify-center px-36">
-            <UploaderMemo medicament_id={data?.id} />
+            {/* <UploaderMemo medicament_id={data?.id} /> */}
           </div>
         </div>
       )}
