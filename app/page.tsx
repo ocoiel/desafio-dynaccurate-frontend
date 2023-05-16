@@ -16,11 +16,12 @@ export default function IndexPage() {
       <div className="flex max-w-[980px] flex-col items-start gap-2">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
           Desafio - Desenvolvedor Frontend <br className="hidden sm:inline" />
-          para a startup Dynaccurate.
+          para a startup Dynaccurate. 🇱🇺
         </h1>
         <p className="max-w-[700px] text-lg text-muted-foreground sm:text-xl">
           O Desafio consiste consiste em desenvolver uma aplicação web para a
-          gestão de medicamentos.
+          gestão de medicamentos. Stack: Next.js, TanStack Forms, TanStack
+          Query, React Hook Form, Radix UI, TailwindCSS, Axios
         </p>
       </div>
       <div className="flex gap-4">

@@ -1,4 +1,5 @@
 import * as React from "react"
+import Image from "next/image"
 import Link from "next/link"
 
 import { NavItem } from "@/types/nav"
@@ -14,7 +15,13 @@ export function MainNav({ items }: MainNavProps) {
   return (
     <div className="flex gap-6 md:gap-10">
       <Link href="/" className="hidden items-center space-x-2 md:flex">
-        <Icons.logo className="h-6 w-6" />
+        {/* <Icons.logo className="h-6 w-6" /> */}
+        <Image
+          alt="Dynaccurate logo"
+          src={"/dynna2.webp"}
+          width={48}
+          height={48}
+        />
         <span className="hidden font-bold sm:inline-block">
           {siteConfig.name}
         </span>
