@@ -1,18 +1,24 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { createMedicament } from "@/service/api"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ArrowRight } from "lucide-react"
-import { useForm, type FieldError } from "react-hook-form"
+import { Controller, useForm, type FieldError } from "react-hook-form"
 
 import { Medicaments, medSchema } from "@/types/medicament-schema"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { Icons } from "@/components/icons"
 import { Dropzone } from "@/components/uploader"
@@ -43,16 +49,21 @@ const AlertInput = ({ children }: { children: React.ReactNode }) =>
 export default function CreateMedicament() {
   const [hasDescription, setHasDescription] = useState(false)
   const [id_state, setId] = useState("")
-  const router = useRouter()
 
   const {
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors, isSubmitting, isSubmitted, isDirty, isValid },
   } = useForm<Medicaments>({
     mode: "onChange",
-    resolver: zodResolver(medSchema.omit({ id: true })),
+    resolver: zodResolver(
+      medSchema.omit({
+        id: true,
+        image_url: true,
+      })
+    ),
   })
 
   // The onSubmit function is invoked by RHF only if the validation is OK.
@@ -170,24 +181,68 @@ export default function CreateMedicament() {
               </div>
               <div className="flex w-full flex-row justify-around gap-x-4">
                 <div className="w-full">
-                  <Label>Status</Label>
-                  <select>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                  </select>
+                  <Label htmlFor="status">Status</Label>
+                  <Controller
+                    name="status"
+                    control={control}
+                    defaultValue={null}
+                    render={({ field }) => (
+                      <Select
+                        onValueChange={(selected) => field.onChange(selected)}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="ideia">Ideia</SelectItem>
+                          <SelectItem value="a fazer">A Fazer</SelectItem>
+                          <SelectItem value="em progresso">
+                            Em Progresso
+                          </SelectItem>
+                          <SelectItem value="concluido">Concluído</SelectItem>
+                          <SelectItem value="cancelado">Cancelado</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
                 </div>
 
                 <div className="w-full">
                   <Label>Prioridade</Label>
-                  <select>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                  </select>
+                  <Controller
+                    name="priority"
+                    control={control}
+                    defaultValue={null}
+                    render={({ field }) => (
+                      <Select
+                        onValueChange={(selected) => field.onChange(selected)}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Theme" />
+                        </SelectTrigger>
+                        <SelectContent {...register("priority")}>
+                          <SelectItem value="baixa">Baixa</SelectItem>
+                          <SelectItem value="media">Média</SelectItem>
+                          <SelectItem value="alta">Alta</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
                 </div>
               </div>
             </div>
+            <pre>{JSON.stringify(formatErrors, null, 2)}</pre>
+            <pre>{JSON.stringify(watch(), null, 2)}</pre>
+            <pre>
+              formState ={" "}
+              {JSON.stringify(
+                { isSubmitting, isSubmitted, isDirty, isValid },
+                null,
+                2
+              )}
+              amor
+            </pre>
+
             <Button
               type="submit"
               className="mt-8 gap-2"
