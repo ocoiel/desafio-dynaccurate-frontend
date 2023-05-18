@@ -38,11 +38,7 @@ Projeto desenvolvido usando as seguintes tecnologias.
 
 ### Demo!
 
-<video src="./docs/demo.mov" controls autoplay>
-</video>
-
-<br>
-<br>
+<img src="https://github.com/ocoiel/desafio-dynaccurate-frontend/assets/33906351/cbb299af-5a38-4770-81b0-82041adb651e" alt="demo app" />(https://youtu.be/l0--xkcwQKQ)
 
 <img src="./public/dynna2.webp" alt="Dynaccurate logo" />
 
