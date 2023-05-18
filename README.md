@@ -37,7 +37,12 @@ Projeto desenvolvido usando as seguintes tecnologias.
 <br>
 
 ### Demo!
-[DyThaccural Horne Criar](https://github.com/ocoiel/desafio-dynaccurate-frontend/assets/33906351/cbb299af-5a38-4770-81b0-82041adb651e)(https://youtu.be/l0--xkcwQKQ)
+
+<video src="./docs/demo.mov" controls autoplay>
+</video>
+
+<br>
+<br>
 
 <img src="./public/dynna2.webp" alt="Dynaccurate logo" />
 
