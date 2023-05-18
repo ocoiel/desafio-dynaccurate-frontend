@@ -123,7 +123,7 @@ export function DataTableRowActions<TData>({
   const { mutate: deleteMedicamentMutation } = useMutation({
     mutationFn: async (medicament_id: string) =>
       deleteMedicament(medicament_id),
-    onMutate: () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["medicament"] })
 
       toast({
