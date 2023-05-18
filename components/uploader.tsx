@@ -7,6 +7,7 @@ import axios from "axios"
 import { ArrowUp, X } from "lucide-react"
 import { useDropzone } from "react-dropzone"
 
+import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 
 import { Button } from "./ui/button"
@@ -111,7 +112,12 @@ export const Dropzone: React.FC<DropzoneProps> = ({
         })}
       >
         <input {...getInputProps()} />
-        <div className="flex flex-col items-center justify-center gap-4">
+        <div
+          className={cn(
+            "flex min-h-full flex-col items-center justify-center gap-4 rounded-lg border p-8 transition-colors",
+            isDragActive ? "border-green-500" : "border-border"
+          )}
+        >
           <ArrowUp className="h-5 w-5 fill-current" />
           {isDragActive ? (
             <p>Solte aqui! 🚀</p>
@@ -126,20 +132,24 @@ export const Dropzone: React.FC<DropzoneProps> = ({
         {/* Accepted files */}
         {files.length > 0 && (
           <>
-            <div className="flex gap-4">
-              <h2 className="title text-xl font-semibold">Pré-visualização</h2>
-              <Button type="button" onClick={removeAll} variant={"secondary"}>
-                Remova os arquivos
-              </Button>
-              <Button
-                type="submit"
-                className="ml-auto mt-1 rounded-md border border-purple-400 px-3 text-[12px] font-bold uppercase tracking-wider text-neutral-500 transition-colors hover:bg-purple-400 hover:text-white"
-              >
+            <div className="flex flex-col items-center justify-center gap-4">
+              <Button className="w-44" type="submit">
                 Enviar
               </Button>
+              <Button
+                className="w-44"
+                type="button"
+                onClick={removeAll}
+                variant={"ghost"}
+              >
+                Remova os arquivos
+              </Button>
             </div>
+            <h2 className="title mt-4 text-xl font-semibold md:mt-8">
+              Pré-visualização
+            </h2>
             <Label>Imagens</Label>
-            <ul className="mt-6 grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+            <ul className="mt-6 grid grid-cols-1 gap-10 self-center justify-self-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
               {files.map((file) => (
                 <li
                   key={file.name}

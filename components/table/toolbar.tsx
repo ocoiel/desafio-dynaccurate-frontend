@@ -27,6 +27,7 @@ export function DataTableToolbar<TData>({
         {/* I took an uncontrolled input error and i have to fix this */}
         <Input
           placeholder="Filtre os medicamentos..."
+          // defaultValue={""}
           value={table.getColumn("name")?.getFilterValue() as string}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
@@ -43,7 +44,7 @@ export function DataTableToolbar<TData>({
         {table.getColumn("priority") && (
           <DataTableFacetedFilter
             column={table.getColumn("priority")}
-            title="Priority"
+            title="Prioridade"
             options={priorities}
           />
         )}
@@ -53,7 +54,7 @@ export function DataTableToolbar<TData>({
             onClick={() => table.resetColumnFilters()}
             className="h-8 px-2 lg:px-3"
           >
-            Reset
+            Resetar
             <X className="ml-2 h-4 w-4" />
           </Button>
         )}
