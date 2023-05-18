@@ -243,7 +243,7 @@ export default function CreateMedicament() {
             </div>
             <span
               onClick={() => setViewDevMode(!viewDevMode)}
-              className="mt-4 flex w-fit cursor-pointer flex-col items-center gap-x-4 text-left text-sm text-neutral-500 transition-colors duration-100 hover:text-neutral-400"
+              className="mt-4 flex w-fit cursor-pointer items-center justify-start text-left text-sm text-neutral-500 transition-colors duration-100 hover:text-neutral-400"
             >
               {viewDevMode ? (
                 <>
@@ -252,8 +252,7 @@ export default function CreateMedicament() {
                 </>
               ) : (
                 <>
-                  <Icons.add className="mr-1 h-4 w-4" />{" "}
-                  <span>Dev mode ✨</span>
+                  <Icons.add className="mr-1 h-4 w-4" /> Dev mode ✨
                 </>
               )}
             </span>
