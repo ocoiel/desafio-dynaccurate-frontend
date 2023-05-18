@@ -3,7 +3,7 @@ import axios from "axios"
 import { Medicaments } from "@/types/medicament-schema"
 import { RequestAPI } from "@/lib/fetcher"
 
-const BASE_URL = "http://127.0.0.1:3334"
+const BASE_URL = "http://127.0.0.1:3333"
 
 async function getMedicaments(): Promise<Medicaments[]> {
   const response = await axios.get<RequestAPI>(`${BASE_URL}/med`)

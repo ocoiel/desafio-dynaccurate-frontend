@@ -92,7 +92,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({
     files.forEach((file) => formData.append("file", file))
 
     const data = await axios.put(
-      `http://127.0.0.1:3334/med/${medicament_id}/upload-image`,
+      `http://127.0.0.1:3333/med/${medicament_id}/upload-image`,
       formData
     )
 
