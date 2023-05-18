@@ -48,6 +48,7 @@ const AlertInput = ({ children }: { children: React.ReactNode }) =>
 
 export default function CreateMedicament() {
   const [hasDescription, setHasDescription] = useState(false)
+  const [viewDevMode, setViewDevMode] = useState(false)
   const [id_state, setId] = useState("")
 
   const {
@@ -135,8 +136,17 @@ export default function CreateMedicament() {
                 onClick={() => setHasDescription(!hasDescription)}
                 className="flex w-52 cursor-pointer items-center text-sm text-neutral-500 transition-colors duration-100 hover:text-neutral-400"
               >
-                <Icons.add className="mr-1 h-4 w-4" />
-                {hasDescription ? "Remover descrição" : "Adicionar descrição"}
+                {hasDescription ? (
+                  <>
+                    <Icons.remove className="mr-1 h-4 w-4" />
+                    <span>Remover descrição</span>
+                  </>
+                ) : (
+                  <>
+                    <Icons.add className="mr-1 h-4 w-4" />
+                    <span>Adicionar descrição</span>
+                  </>
+                )}
               </span>
               {hasDescription && (
                 <div className="flex flex-col space-y-2">
@@ -218,7 +228,7 @@ export default function CreateMedicament() {
                         onValueChange={(selected) => field.onChange(selected)}
                       >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Theme" />
+                          <SelectValue placeholder="Prioridade" />
                         </SelectTrigger>
                         <SelectContent {...register("priority")}>
                           <SelectItem value="baixa">Baixa</SelectItem>
@@ -231,17 +241,36 @@ export default function CreateMedicament() {
                 </div>
               </div>
             </div>
-            <pre>{JSON.stringify(formatErrors, null, 2)}</pre>
-            <pre>{JSON.stringify(watch(), null, 2)}</pre>
-            <pre>
-              formState ={" "}
-              {JSON.stringify(
-                { isSubmitting, isSubmitted, isDirty, isValid },
-                null,
-                2
+            <span
+              onClick={() => setViewDevMode(!viewDevMode)}
+              className="mt-4 flex w-fit cursor-pointer flex-col items-center gap-x-4 text-left text-sm text-neutral-500 transition-colors duration-100 hover:text-neutral-400"
+            >
+              {viewDevMode ? (
+                <>
+                  <Icons.remove className="mr-1 h-4 w-4" />{" "}
+                  <span>Sair Dev mode ✨</span>
+                </>
+              ) : (
+                <>
+                  <Icons.add className="mr-1 h-4 w-4" />{" "}
+                  <span>Dev mode ✨</span>
+                </>
               )}
-              amor
-            </pre>
+            </span>
+            {viewDevMode && (
+              <div className="flex flex-col space-y-2">
+                <pre>{JSON.stringify(formatErrors, null, 2)}</pre>
+                <pre>data = {JSON.stringify(watch(), null, 2)}</pre>
+                <pre>
+                  formState ={" "}
+                  {JSON.stringify(
+                    { isSubmitting, isSubmitted, isDirty, isValid },
+                    null,
+                    2
+                  )}
+                </pre>
+              </div>
+            )}
 
             <Button
               type="submit"

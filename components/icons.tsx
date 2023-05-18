@@ -1,6 +1,7 @@
 import {
   Edit,
   LucideProps,
+  Minus,
   Moon,
   Plus,
   SunMedium,
@@ -12,6 +13,7 @@ export type Icon = LucideIcon
 
 export const Icons = {
   add: Plus,
+  remove: Minus,
   edit: Edit,
   sun: SunMedium,
   moon: Moon,
