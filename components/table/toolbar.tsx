@@ -24,10 +24,9 @@ export function DataTableToolbar<TData>({
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
-        {/* I took an uncontrolled input error and i have to fix this */}
         <Input
           placeholder="Filtre os medicamentos..."
-          // defaultValue={""}
+          defaultValue={""}
           value={table.getColumn("name")?.getFilterValue() as string}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
