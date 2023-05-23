@@ -24,8 +24,8 @@ export default function Medicament({ params }: { params: { id: string } }) {
               {medicament.name}
             </h1>
 
-            <Badge>genérico</Badge>
-            <Badge>importado</Badge>
+            <Badge>{medicament.priority}</Badge>
+            <Badge>{medicament.status}</Badge>
           </div>
 
           <div>

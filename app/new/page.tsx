@@ -1,5 +1,4 @@
 "use client"
-
 import { useState } from "react"
 import { createMedicament } from "@/service/api"
 import { zodResolver } from "@hookform/resolvers/zod"
